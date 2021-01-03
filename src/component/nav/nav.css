@@ -1,0 +1,38 @@
+nav {
+    overflow: auto;
+    display: flex;
+    order: 0;
+    flex: 1 1 auto;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 60px;
+}
+
+.nav-xs {
+    width: 15px;
+}
+
+.nav-sm {
+    width: 30px;
+}
+
+.nav-md {
+    width: 45px;
+}
+
+.nav-lg {
+    width: 60px;
+}
+
+.nav-item{
+    width: 90%;
+    display: flex;
+    flex: 0 0 auto;
+}
+
+.nav-item img{
+    width: 90%;
+    height: 90%;
+    border: 1px solid black;
+}

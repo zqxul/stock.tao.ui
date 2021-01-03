@@ -1,24 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import Nav from './component/nav/nav';
+import { MenuList } from './config'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <>
+    <Nav menus={MenuList} />
+    <main>
+      <header>
+        header
+        {/* <div>
+          上证指数
+        </div>
+        <div>
+          深证指数
+        </div>
+        <div>
+          香港指数
+        </div> */}
       </header>
-    </div>
+      <div className='search'>search</div>
+      <div className='attention'>attention</div>
+      <div className='recommend'>recommend</div>
+      <div className='info'>info</div>
+      <div className='notice'>notice</div>
+      <div className='quotes'>quotes</div>
+      <div className='comment'>comment</div>
+    </main>
+    </>
   );
 }
 

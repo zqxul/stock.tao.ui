@@ -6,10 +6,10 @@ nav {
     position: fixed;
     left: 5%;
     bottom: 5%;
-    /* border: 1px solid black; */
+    opacity: 0.25;
 }
 
-.nav-group{
+.nav-group {
     display: flex;
     order: 0;
     flex: 1 1 auto;
@@ -34,24 +34,24 @@ nav {
     width: 60px;
 }
 
-.nav-item{
+.nav-item {
     width: 90%;
     display: flex;
     flex: 0 0 auto;
 }
 
-.nav-item img{
+.nav-item img {
     width: 80%;
     height: 80%;
     border: 1px solid black;
 }
 
-.nav-item a{
+.nav-item a {
     text-decoration: none;
     text-align: center;
 }
 
-.nav-bar{
+.nav-bar {
     border-radius: 50%;
     /* border: 1px solid black; */
 }

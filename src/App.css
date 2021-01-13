@@ -23,6 +23,7 @@ main {
 
 main {
     border: 1px solid black;
+    height: 721px;
 }
 
 header {
@@ -37,7 +38,7 @@ header {
 
 .search {
     grid-column: 1 / 4;
-    grid-row: 3 / 10;
+    grid-row: 3 / 15;
     border: 1px solid black;
 }
 
@@ -55,19 +56,13 @@ header {
 
 .attention {
     grid-column: 1 / 4;
-    grid-row: 10 / 20;
+    grid-row: 15 / 31;
     border: 1px solid black;
 }
 
 .quotes {
     grid-column: 4 / 9;
     grid-row: 10 / 31;
-    border: 1px solid black;
-}
-
-.recommend {
-    grid-column: 1 / 4;
-    grid-row: 20 / 31;
     border: 1px solid black;
 }
 

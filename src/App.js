@@ -1,15 +1,15 @@
 import './App.css';
 import Nav from './component/nav/nav';
-import SearchBox from './component/search/search'
+import SearchPanel from './component/search/search'
 import { MenuList } from './config'
 
 function App() {
   return (
     <>
-    <Nav menus={MenuList} size='lg' />
-    <main>
-      <header>
-        header
+      <Nav menus={MenuList} size='lg' />
+      <main>
+        <header>
+          header
         {/* <div>
           上证指数
         </div>
@@ -19,17 +19,16 @@ function App() {
         <div>
           香港指数
         </div> */}
-      </header>
-      <div className='search'>
-        <SearchBox/>
-      </div>
-      <div className='attention'>attention</div>
-      <div className='recommend'>recommend</div>
-      <div className='info'>info</div>
-      <div className='notice'>notice</div>
-      <div className='quotes'>quotes</div>
-      <div className='comment'>comment</div>
-    </main>
+        </header>
+        <div className='search'>
+          <SearchPanel />
+        </div>
+        <div className='attention'>attention</div>
+        <div className='info'>info</div>
+        <div className='notice'>notice</div>
+        <div className='quotes'>quotes</div>
+        <div className='comment'>comment</div>
+      </main>
     </>
   );
 }

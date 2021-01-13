@@ -5,7 +5,7 @@ import { MenuList } from './config'
 function App() {
   return (
     <>
-    <Nav menus={MenuList} />
+    <Nav menus={MenuList} size='md' />
     <main>
       <header>
         header

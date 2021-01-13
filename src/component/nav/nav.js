@@ -3,8 +3,6 @@ import './nav.css';
 
 export default class Nav extends React.Component {
 
-
-
     constructor(props) {
         super(props)
         this.state = {
@@ -30,7 +28,7 @@ export default class Nav extends React.Component {
         const { menus } = this.props
         const { contentVisibility } = this.state
         return (
-            <nav className='nav nav-xs'>
+            <nav className={'nav nav-' + this.props.size} onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                 <div className='nav-group' style={{ contentVisibility: contentVisibility }}>
                     {menus.map((menu) => {
                         const { title, link, icon } = menu
@@ -38,7 +36,7 @@ export default class Nav extends React.Component {
                     })}
                 </div>
                 <div className='nav-bar'>
-                    <img src='/nav128.svg' onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave} alt='' />
+                    <img src='/nav128.svg' alt='' />
                 </div>
             </nav>
         )

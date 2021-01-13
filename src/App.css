@@ -1,11 +1,14 @@
+* {
+    box-sizing: border-box;
+}
 body {
     display: block;
 }
 
 #root {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    /* display: flex; */
+    /* align-items: center; */
+    /* justify-content: space-between; */
     gap: 0 0.5em;
 }
 
@@ -17,7 +20,7 @@ main {
     grid-template-rows: repeat(30, 1fr);
 }
 
-nav, main {
+main {
     border: 1px solid black;
 }
 

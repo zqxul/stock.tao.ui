@@ -1,40 +1,32 @@
 
 export const MenuList = [
     {
-        key: 'menu1',
-        title: 'menu1',
+        key: 'chat',
+        title: 'chat',
         link: '#',
-        icon: '/shujuzhongxin.png'
+        icon: '/chat128.svg',
+        desc: '发推，分享、评论、投票'
     },
     {
-        key: 'menu2',
-        title: 'menu2',
+        key: 'study',
+        title: 'study',
         link: '#',
-        icon: '/shujuzhongxin.png'
+        icon: '/study128.svg',
+        desc: '基本面、分析'
     },
     {
-        key: 'menu3',
-        title: 'menu3',
+        key: 'found',
+        title: 'found',
         link: '#',
-        icon: '/shujuzhongxin.png'
+        icon: '/bulb128.svg',
+        desc: '文章、观点'
     },
     {
-        key: 'menu4',
-        title: 'menu4',
+        key: 'live',
+        title: 'live',
         link: '#',
-        icon: '/shujuzhongxin.png'
-    },
-    {
-        key: 'menu5',
-        title: 'menu5',
-        link: '#',
-        icon: '/shujuzhongxin.png'
-    },
-    {
-        key: 'menu6',
-        title: 'menu6',
-        link: '#',
-        icon: '/shujuzhongxin.png'
+        icon: '/live128.svg',
+        desc: '直播语音讨论交流互动'
     }
         
 ]

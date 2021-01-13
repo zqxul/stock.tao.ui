@@ -1,11 +1,12 @@
 import './App.css';
 import Nav from './component/nav/nav';
+import SearchBox from './component/search/search'
 import { MenuList } from './config'
 
 function App() {
   return (
     <>
-    <Nav menus={MenuList} size='md' />
+    <Nav menus={MenuList} size='lg' />
     <main>
       <header>
         header
@@ -19,7 +20,9 @@ function App() {
           香港指数
         </div> */}
       </header>
-      <div className='search'>search</div>
+      <div className='search'>
+        <SearchBox/>
+      </div>
       <div className='attention'>attention</div>
       <div className='recommend'>recommend</div>
       <div className='info'>info</div>

@@ -8,17 +8,17 @@ export default class Nav extends React.Component {
         this.state = {
             contentVisibility: 'hidden'
         }
-        this.onMouseEnter = this.onMouseEnter.bind(this)
-        this.onMouseLeave = this.onMouseLeave.bind(this)
+        this.handleMouseEnter = this.handleMouseEnter.bind(this)
+        this.handleMouseLeave = this.handleMouseLeave.bind(this)
     }
 
-    onMouseEnter() {
+    handleMouseEnter() {
         this.setState({
             contentVisibility: 'visible'
         })
     }
 
-    onMouseLeave() {
+    handleMouseLeave() {
         this.setState({
             contentVisibility: 'hidden'
         })
@@ -28,7 +28,7 @@ export default class Nav extends React.Component {
         const { menus } = this.props
         const { contentVisibility } = this.state
         return (
-            <nav className={'nav nav-' + this.props.size} onMouseOver={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+            <nav className={'nav nav-' + this.props.size} onMouseOver={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave}>
                 <div className='nav-group' style={{ contentVisibility: contentVisibility }}>
                     {menus.map((menu) => {
                         const { title, link, icon } = menu

@@ -36,7 +36,10 @@ class GroupPanel extends React.Component {
     constructor(props) {
         super(props)
         this.handleSelect = this.handleSelect.bind(this)
+        this.handleClick = this.handleClick.bind(this)
         this.state = {
+            showOptions: false,
+            selectedOption: {},
             groups: [
                 {
                     groupId: "1",
@@ -47,22 +50,39 @@ class GroupPanel extends React.Component {
                     groupName: "分组2",
                 }
             ]
+
         }
     }
 
     handleSelect() { }
 
-    render() {
+    handleClick() {
+        const { showOptions } = this.state
+        this.setState({
+            showOptions: !showOptions
+        })
+    }
+
+    componentDidMount() {
         const { groups } = this.state
+        console.log(groups)
+        this.setState({
+            selectedOption: groups.length > 0 ? groups[0] : ''
+        })
+    }
+
+    render() {
+        const { groups, showOptions, selectedOption } = this.state
         const style = {
-            width: '100%'
+            width: '100%',
+            'content-visibility': showOptions === true ? 'visible' : 'hidden'
         }
         return (
             <div className='group-panel'>
-                <input className='group-option' name='selectGroup' list='group-options' onChange={this.handleSelect} />
-                <datalist id='group-options' className='group-options' style={style}>
+                <select className='group-option' name='selectGroup' value={selectedOption.groupId} onChange={this.handleSelect} onClick={this.handleClick} />
+                <div id='group-options' className='group-options' style={style}>
                     {groups.map((group) => <option key={group.groupId}>{group.groupName}</option>)}
-                </datalist>
+                </div>
             </div>
         )
     }

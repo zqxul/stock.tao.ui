@@ -52,11 +52,6 @@ class GroupPanel extends React.Component {
 
     handleSelect() { }
 
-    handleClick(e) {
-        console.log('---')
-        e.preventDefault()
-    }
-
     render() {
         const { groups } = this.state
         const style = {
@@ -64,7 +59,7 @@ class GroupPanel extends React.Component {
         }
         return (
             <div className='group-panel'>
-                <input className='group-option' name='selectGroup' list='group-options' onChange={this.handleSelect} onClick={this.handleClick} />
+                <input className='group-option' name='selectGroup' list='group-options' onChange={this.handleSelect} />
                 <datalist id='group-options' className='group-options' style={style}>
                     {groups.map((group) => <option key={group.groupId}>{group.groupName}</option>)}
                 </datalist>

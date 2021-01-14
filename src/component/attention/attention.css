@@ -2,4 +2,21 @@
     padding: 6px 6px;
 }
 
+.attention-header {
+    display: flex;
+    justify-content: space-between;
+}
+
 .attention-icon {}
+
+.group-panel {
+    flex: 2;
+}
+
+.price-lasted {
+    flex: 1;
+}
+
+.price-rise-fall {
+    flex: 1;
+}

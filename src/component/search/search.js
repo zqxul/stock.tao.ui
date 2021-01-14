@@ -1,4 +1,5 @@
 import React from 'react'
+import './search.css'
 
 export default class SearchPanel extends React.Component {
 
@@ -18,10 +19,11 @@ export default class SearchPanel extends React.Component {
 
     render() {
         return (
-            < div >
+            < div className='search-panel' >
                 <SearchBox handler={this.handleSearch} />
                 <hr />
                 <ResultPanel />
+                <PagePanel />
             </div >
         )
     }
@@ -67,10 +69,13 @@ class SearchBox extends React.Component {
         const { keyword } = this.state
         return (
             <div className='search-box'>
-                <form>
-                    <input className='keyword' type='text' value={keyword} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} alt='请输入名称或代码' />
-                    <button className='reset' type='reset' onClick={this.handleReset}>X</button>
-                    <button className='submit' type='submit' onClick={this.handleSubmit}>V</button>
+                <form className='search-form'>
+                    <div className='keyword-group'>
+                        <img className='search-logo' src='/search32.svg' alt=''/>
+                        <input className='keyword' name='keyword' type='text' value={keyword} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} placeholder='请输入名称或代码' />
+                        <button className='reset' type='reset' onClick={this.handleReset}>✖</button>
+                        {/* <button className='submit' type='submit' onClick={this.handleSubmit}>✓</button> */}
+                    </div>
                 </form>
             </div>
         )
@@ -92,9 +97,8 @@ class ResultPanel extends React.Component {
     handleRefresh() { }
     render() {
         return (
-            <div>
+            <div className="result-panel">
                 <div>content</div>
-                <PagePanel />
             </div>
         )
     }
@@ -129,7 +133,7 @@ class PagePanel extends React.Component {
 
     render() {
         return (
-            <div>
+            <div className='page-panel'>
                 <button type='button' onClick={this.handlePre}>{'<'}</button>
                 <button type='button' onClick={this.handleNext}>{'>'}</button>
             </div>

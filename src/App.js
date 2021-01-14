@@ -10,19 +10,8 @@ function App() {
       <main>
         <header>
           header
-        {/* <div>
-          上证指数
-        </div>
-        <div>
-          深证指数
-        </div>
-        <div>
-          香港指数
-        </div> */}
         </header>
-        <div className='search'>
           <SearchPanel />
-        </div>
         <div className='attention'>attention</div>
         <div className='info'>info</div>
         <div className='notice'>notice</div>

@@ -1,5 +1,7 @@
 import React from 'react'
 import './search.css'
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faTimes, faSearch, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 
 export default class SearchPanel extends React.Component {
 
@@ -37,9 +39,7 @@ class SearchBox extends React.Component {
             keyword: ''
         }
         this.handleChange = this.handleChange.bind(this)
-        this.handleFocus = this.handleFocus.bind(this)
-        this.handleBlur = this.handleBlur.bind(this)
-        this.handleReset = this.handleReset.bind(this)
+        this.handleClear = this.handleClear.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
     }
 
@@ -49,11 +49,7 @@ class SearchBox extends React.Component {
         })
     }
 
-    handleFocus() { }
-
-    handleBlur() { }
-
-    handleReset() {
+    handleClear() {
         this.setState({
             keyword: ''
         })
@@ -68,16 +64,14 @@ class SearchBox extends React.Component {
     render() {
         const { keyword } = this.state
         return (
-            <div className='search-box'>
-                <form className='search-form'>
-                    <div className='keyword-group'>
-                        <img className='search-logo' src='/search32.svg' alt=''/>
-                        <input className='keyword' name='keyword' type='text' value={keyword} onChange={this.handleChange} onFocus={this.handleFocus} onBlur={this.handleBlur} placeholder='请输入名称或代码' />
-                        <button className='reset' type='reset' onClick={this.handleReset}>✖</button>
-                        {/* <button className='submit' type='submit' onClick={this.handleSubmit}>✓</button> */}
-                    </div>
-                </form>
-            </div>
+            <form className='search-box'>
+                <div className='keyword-group'>
+                    <Icon className='search-logo' icon={faSearch} />
+                    <input className='keyword' name='keyword' type='text' value={keyword} onChange={this.handleChange} placeholder='请输入名称或代码' />
+                    <Icon className='reset' icon={faTimes} onClick={this.handleClear} />
+                    {/* <button className='submit' type='submit' onClick={this.handleSubmit}>✓</button> */}
+                </div>
+            </form>
         )
     }
 }
@@ -134,8 +128,8 @@ class PagePanel extends React.Component {
     render() {
         return (
             <div className='page-panel'>
-                <button type='button' onClick={this.handlePre}>{'<'}</button>
-                <button type='button' onClick={this.handleNext}>{'>'}</button>
+                <Icon className='page-pre' icon={faAngleLeft} onClick={this.handlePre}/>
+                <Icon className='page-next' icon={faAngleRight} onClick={this.handleNext}/>
             </div>
         )
     }

@@ -4,10 +4,6 @@
 
 .search-box {
     height: 15%;
-}
-
-.search-form {
-    height: 100%;
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
@@ -20,8 +16,9 @@
     border: 1px solid;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     padding: 3px 5px;
+    width: 280px;
 }
 
 .keyword-group {
@@ -37,6 +34,7 @@
     height: 15px;
     width: 15px;
     margin-left: 2px;
+    opacity: 0.3;
 }
 
 .keyword-group input, .keyword-group button {
@@ -49,6 +47,7 @@
     outline-style: none;
     padding: 0px 2px;
     margin: 0px 5px;
+    width: 85%;
 }
 
 .keyword::selection {
@@ -72,4 +71,5 @@
 
 .page-panel {
     height: 10%;
+    padding: 5px;
 }

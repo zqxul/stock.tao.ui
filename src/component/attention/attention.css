@@ -5,12 +5,16 @@
 .attention-header {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    font-size: xx-small;
+    text-align: center;
 }
 
 .attention-icon {}
 
 .group-panel {
     flex: 2;
+    margin: 0 10px;
 }
 
 .price-lasted {
@@ -19,4 +23,8 @@
 
 .price-rise-fall {
     flex: 1;
+}
+
+.group-options {
+    width: ;
 }

@@ -20,7 +20,7 @@ export default class AttentionPanel extends React.Component {
         return (
             <div className='attention-panel'>
                 <div className='attention-header'>
-                    <Icon className='attention-icon' icon={faList} />
+                    <Icon className='attention-icon' icon={faList} title='关注列表' />
                     <GroupPanel />
                     <div className='price-lasted' >最新价</div>
                     <div className='price-rise-fall'>涨跌幅</div>
@@ -41,6 +41,10 @@ class GroupPanel extends React.Component {
                 {
                     groupId: "1",
                     groupName: "分组1",
+                },
+                {
+                    groupId: "2",
+                    groupName: "分组2",
                 }
             ]
         }
@@ -48,12 +52,23 @@ class GroupPanel extends React.Component {
 
     handleSelect() { }
 
+    handleClick(e) {
+        console.log('---')
+        e.preventDefault()
+    }
+
     render() {
         const { groups } = this.state
+        const style = {
+            width: '100%'
+        }
         return (
-            <select className='group-panel' onChange={this.handleSelect}>
-                {groups.map((group) => <option key={group.groupId}>{group.groupName}</option>)}
-            </select>
+            <div className='group-panel'>
+                <input className='group-option' name='selectGroup' list='group-options' onChange={this.handleSelect} onClick={this.handleClick} />
+                <datalist id='group-options' className='group-options' style={style}>
+                    {groups.map((group) => <option key={group.groupId}>{group.groupName}</option>)}
+                </datalist>
+            </div>
         )
     }
 }

@@ -18,7 +18,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 3px 5px;
-    width: 280px;
+    width: 80%;
 }
 
 .keyword-group {
@@ -35,6 +35,11 @@
     width: 15px;
     margin-left: 2px;
     opacity: 0.3;
+}
+
+.search-spliter {
+    margin: 0;
+    padding: 0;
 }
 
 .keyword-group input, .keyword-group button {
@@ -67,9 +72,14 @@
 
 .result-panel {
     height: 72%;
+    padding: 0px 6px;
 }
 
 .page-panel {
     height: 10%;
     padding: 5px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border: 1px solid rgb(88, 82, 77);
 }

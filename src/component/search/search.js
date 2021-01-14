@@ -1,7 +1,7 @@
 import React from 'react'
 import './search.css'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faTimes, faSearch, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faTimes, faSearch, faAngleLeft, faAngleRight, faList } from '@fortawesome/free-solid-svg-icons'
 
 export default class SearchPanel extends React.Component {
 
@@ -23,7 +23,7 @@ export default class SearchPanel extends React.Component {
         return (
             < div className='search-panel' >
                 <SearchBox handler={this.handleSearch} />
-                <hr />
+                <hr className='search-spliter' />
                 <ResultPanel />
                 <PagePanel />
             </div >
@@ -69,8 +69,8 @@ class SearchBox extends React.Component {
                     <Icon className='search-logo' icon={faSearch} />
                     <input className='keyword' name='keyword' type='text' value={keyword} onChange={this.handleChange} placeholder='请输入名称或代码' />
                     <Icon className='reset' icon={faTimes} onClick={this.handleClear} />
-                    {/* <button className='submit' type='submit' onClick={this.handleSubmit}>✓</button> */}
                 </div>
+                {/* <button className='submit' type='submit' onClick={this.handleSubmit}>查询</button> */}
             </form>
         )
     }
@@ -92,6 +92,7 @@ class ResultPanel extends React.Component {
     render() {
         return (
             <div className="result-panel">
+                <Icon className='result-list' icon={faList} />
                 <div>content</div>
             </div>
         )
@@ -128,8 +129,8 @@ class PagePanel extends React.Component {
     render() {
         return (
             <div className='page-panel'>
-                <Icon className='page-pre' icon={faAngleLeft} onClick={this.handlePre}/>
-                <Icon className='page-next' icon={faAngleRight} onClick={this.handleNext}/>
+                <button onClick={this.handlePre}><Icon className='page-pre' icon={faAngleLeft} /></button>
+                <button onClick={this.handleNext}><Icon className='page-next' icon={faAngleRight} /></button>
             </div>
         )
     }

@@ -145,7 +145,9 @@ class GroupItem extends React.Component {
         dragHandler(group)
     }
 
-    handleConfirm() { }
+    handleConfirm() {
+        // call modify api
+    }
 
     handleCancel() {
         this.setState({
@@ -168,8 +170,8 @@ class GroupItem extends React.Component {
             toolDiv = (
                 <div className='group-tool'>
                     <input type='text' className='group-name' value={group.groupName} />
-                    <Icon className='group-del' icon={faTimes} title='取消' onClick={this.handleCancel} />
-                    <Icon className='group-edit' icon={faCheck} title='确认' onClick={this.handleConfirm} />
+                    <Icon className='group-cancel' icon={faTimes} title='取消' onClick={this.handleCancel} />
+                    <Icon className='group-confirm' icon={faCheck} title='确认' onClick={this.handleConfirm} />
                 </div>
             )
         }

@@ -61,13 +61,12 @@
     padding: 3px 0px;
 }
 
-.group-edit {
+.group-edit, .group-confirm {
     flex: 1;
     padding: 4px 0px;
-    ;
 }
 
-.group-del {
+.group-del, .group-cancel {
     flex: 1;
     padding: 3px 2px 3px 0px;
 }

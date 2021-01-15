@@ -14,10 +14,10 @@ function App() {
         </header>
         <SearchPanel />
         <AttentionPanel />
-        <div className='info'>info</div>
+        {/* <div className='info'>info</div>
         <div className='notice'>notice</div>
         <div className='quotes'>quotes</div>
-        <div className='comment'>comment</div>
+        <div className='comment'>comment</div> */}
       </main>
     </>
   );

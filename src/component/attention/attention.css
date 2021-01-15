@@ -40,9 +40,18 @@
     overflow: hidden auto;
 }
 
+.group-option {
+    border-bottom: hidden;
+}
+
 .group-item {
     display: flex;
     align-items: center;
+    margin: 1px 0px;
+}
+
+.group-item:hover {
+    background-color: darkgray;
 }
 
 .group-tool {
@@ -61,6 +70,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 45px;
+    user-select: none;
 }
 
 .group-sort {

@@ -39,6 +39,7 @@ class GroupPanel extends React.Component {
         this.handleClick = this.handleClick.bind(this)
         this.handleDrag = this.handleDrag.bind(this)
         this.handleDel = this.handleDel.bind(this)
+        this.hideGroupOptions = this.hideGroupOptions.bind(this)
         this.state = {
             showOptions: false,
             selectedOption: {},
@@ -81,11 +82,18 @@ class GroupPanel extends React.Component {
     handleSelect() { }
 
     handleClick() {
+        this.hideGroupOptions()
+    }
+
+    handleGroupItemClick(group) {
+        this.hideGroupOptions()
+    }
+
+    hideGroupOptions() {
         const { showOptions } = this.state
         this.setState({
             showOptions: !showOptions
         })
-
     }
 
     componentDidMount() {
@@ -116,14 +124,14 @@ class GroupPanel extends React.Component {
         const { groups, showOptions, selectedOption } = this.state
         const style = {
             width: '100%',
-            'content-visibility': showOptions === true ? 'visible' : 'hidden'
+            contentVisibility: showOptions === true ? 'visible' : 'hidden'
         }
         return (
             <div className='group-panel'>
-                <select className='group-option' name='selectGroup' value={selectedOption.groupId} onChange={this.handleSelect} onClick={this.handleClick} />
-                <div id='group-options' className='group-options' style={style}>
+                <select className='group-option' value={selectedOption.groupName} onChange={this.handleSelect} onClick={this.handleClick} />
+                <div className='group-options' style={style}>
                     {
-                        groups.map((group) => <GroupItem key={group.groupId} group={group} onDrag={this.handleDrag} delHandler={this.handleDel} dragHandler={this.handleDrag} />)
+                        groups.map((group) => <GroupItem key={group.groupId} group={group} clickHandler={this.handleClick} delHandler={this.handleDel} dragHandler={this.handleDrag} />)
                     }
                 </div>
             </div>
@@ -135,56 +143,77 @@ class GroupItem extends React.Component {
 
     constructor(props) {
         super(props)
-        this.handleEdit = this.handleEdit.bind(this)
-        this.handleDel = this.handleDel.bind(this)
-        this.handleDragStart = this.handleDragStart.bind(this)
-        this.handleDrag = this.handleDrag.bind(this)
-        this.handleDragEnd = this.handleDragEnd.bind(this)
-        this.handleConfirm = this.handleConfirm.bind(this)
-        this.handleCancel = this.handleCancel.bind(this)
-        this.handleChange = this.handleChange.bind(this)
         this.state = {
             group: this.props.group,
             readonly: true,
-            draging: false
+            draggable: false,
+            cursor: 'initial'
         }
     }
 
-    handleEdit() {
+    handleEdit = () => {
         this.setState({
             readonly: false
         })
     }
 
-    handleDel() {
+    handleDel = () => {
         // call del api and nofify parent component
         const { group } = this.state
         const { delHandler } = this.props
         delHandler(group)
     }
 
-    handleDragStart(e) {
-        console.log("drag start:" + e.target)
+    handleDragStart = (e) => {
+        console.log("drag start")
+        this.setState({
+            cursor: 'grabbing'
+        })
     }
 
-    handleDrag() {
+    handleDragEnd = (e) => {
+        console.log("drag end")
+        this.setState({
+            cursor: 'initial'
+        })
+    }
+
+    handleDrag = () => {
+        console.log("drag")
         const { group } = this.state
         const { dragHandler } = this.props
         dragHandler(group)
     }
 
-    handleDragEnd(e) {
-        console.log("drag end:" + e.target)
+    handleDrop = () => {
+        console.log("drop")
+        this.setState({
+            cursor: 'initial'
+        })
     }
 
-    handleConfirm(e) {
+    handleMouseUp = () => {
+        console.log("mouse up")
+        this.setState({
+            cursor: 'move'
+        })
+    }
+
+    handleMouseDown = () => {
+        console.log("mouse down")
+        this.setState({
+            cursor: 'grab'
+        })
+    }
+
+    handleConfirm = (e) => {
         // call modify api
         this.setState({
             readonly: true
         })
     }
 
-    handleChange(e) {
+    handleChange = (e) => {
         const { group } = this.state
         group.groupName = e.target.value
         this.setState({
@@ -192,14 +221,31 @@ class GroupItem extends React.Component {
         })
     }
 
-    handleCancel() {
+    handleCancel = () => {
         this.setState({
             readonly: true
         })
     }
 
+    handleMouseEnter = () => {
+        this.setState({
+            draggable: true,
+            cursor: 'move'
+        })
+    }
+
+    handleMouseLeave = () => {
+        this.setState({
+            draggable: false,
+            cursor: 'initial'
+        })
+    }
+
     render() {
-        const { group, readonly } = this.state
+        const { group, readonly, draggable, cursor } = this.state
+        const style = {
+            cursor: cursor
+        }
         let toolDiv = readonly ? (
             <div className='group-tool'>
                 <div className='group-name'>{group.groupName}</div>
@@ -214,8 +260,8 @@ class GroupItem extends React.Component {
                 </div>
             )
         return (
-            <div className='group-item' >
-                <Icon className='group-sort' icon={faSort} title='拖动' onDrag={this.handleDrag} onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} />
+            <div className='group-item' draggable={draggable} onDrag={this.handleDrag} onDrop={this.handleDrop} onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} style={style}>
+                <Icon className='group-sort' style={style} icon={faSort} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} />
                 {toolDiv}
             </div>
         )

@@ -1,7 +1,7 @@
 import React from 'react'
 import './attention.css'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faList } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faList, faSort, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -37,6 +37,8 @@ class GroupPanel extends React.Component {
         super(props)
         this.handleSelect = this.handleSelect.bind(this)
         this.handleClick = this.handleClick.bind(this)
+        this.handleDrag = this.handleDrag.bind(this)
+        this.handleDel = this.handleDel.bind(this)
         this.state = {
             showOptions: false,
             selectedOption: {},
@@ -44,10 +46,12 @@ class GroupPanel extends React.Component {
                 {
                     groupId: "1",
                     groupName: "分组1",
+                    order: 1
                 },
                 {
                     groupId: "2",
                     groupName: "分组2",
+                    order: 2
                 }
             ]
 
@@ -67,8 +71,24 @@ class GroupPanel extends React.Component {
         const { groups } = this.state
         console.log(groups)
         this.setState({
-            selectedOption: groups.length > 0 ? groups[0] : ''
+            selectedOption: groups.length > 0 ? groups[0].groupId : ''
         })
+    }
+
+    handleDrag() {
+        // const { groups } = this.state
+        // todo drag logic
+    }
+
+    handleDel(group) {
+        const { groups } = this.state
+        let groupIndex = groups.findIndex((item) => item.groupId === group.groupId)
+        if (groupIndex !== -1) {
+            groups.splice(groupIndex, 1)
+            this.setState({
+                groups: groups
+            })
+        }
     }
 
     render() {
@@ -81,7 +101,53 @@ class GroupPanel extends React.Component {
             <div className='group-panel'>
                 <select className='group-option' name='selectGroup' value={selectedOption.groupId} onChange={this.handleSelect} onClick={this.handleClick} />
                 <div id='group-options' className='group-options' style={style}>
-                    {groups.map((group) => <option key={group.groupId}>{group.groupName}</option>)}
+                    {
+                        groups.map((group) => <GroupItem key={group.groupId} group={group} onDrag={this.handleDrag} delHandler={this.handleDel} dragHandler={this.handleDrag} />)
+                    }
+                </div>
+            </div>
+        )
+    }
+}
+
+class GroupItem extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.handleEdit = this.handleEdit.bind(this)
+        this.handleDel = this.handleDel.bind(this)
+        this.handleDrag = this.handleDrag.bind(this)
+        this.state = {
+            group: this.props.group
+        }
+    }
+
+    handleEdit() {
+
+    }
+
+    handleDel() {
+        // call del api and nofify parent component
+        const { group } = this.state
+        const { delHandler } = this.props
+        delHandler(group)
+    }
+
+    handleDrag() {
+        const { group } = this.state
+        const { dragHandler } = this.props
+        dragHandler(group)
+    }
+
+    render() {
+        const { group } = this.state
+        return (
+            <div className='group-item'>
+                <div className='group-name'>{group.groupName}</div>
+                <div className="group-tool">
+                    <Icon className='group-edit' icon={faEdit} title='编辑' onClick={this.handleEdit} />
+                    <Icon className='group-del' icon={faTimes} title='删除' onClick={this.handleDel} />
+                    <Icon className='group-sort' icon={faSort} title='拖动' onDrag={this.handleDrag} />
                 </div>
             </div>
         )

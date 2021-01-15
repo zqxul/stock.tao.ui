@@ -5,8 +5,7 @@
 .attention-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    font-size: xx-small;
+    align-items: flex-start;
     text-align: center;
 }
 
@@ -25,25 +24,50 @@
     flex: 1;
 }
 
+.price-lasted, .price-rise-fall {
+    font-size: xx-small;
+}
+
 .group-options {
     display: flex;
     flex-flow: column;
     position: relative;
     top: 0%;
-    align-self: baseline;
+    border: 1px solid;
+    border-top: hidden;
 }
 
 .group-item {
     display: flex;
-}
-
-.group-name {
-    flex: 3;
+    align-items: center;
 }
 
 .group-tool {
     display: flex;
-    flex: 1;
-    justify-content: space-between;
+    flex: 6;
     align-items: center;
+}
+
+.group-name {
+    flex: 5;
+    font-size: xx-small;
+    text-align: left;
+    padding: 4px 0px;
+    width: 100%;
+}
+
+.group-sort {
+    flex: 1;
+    padding: 3px 0px;
+}
+
+.group-edit {
+    flex: 1;
+    padding: 4px 0px;
+    ;
+}
+
+.group-del {
+    flex: 1;
+    padding: 3px 2px 3px 0px;
 }

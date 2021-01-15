@@ -1,7 +1,7 @@
 import React from 'react'
 import './attention.css'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faEdit, faList, faSort, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faCheck, faEdit, faList, faSort, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -65,6 +65,7 @@ class GroupPanel extends React.Component {
         this.setState({
             showOptions: !showOptions
         })
+
     }
 
     componentDidMount() {
@@ -117,13 +118,18 @@ class GroupItem extends React.Component {
         this.handleEdit = this.handleEdit.bind(this)
         this.handleDel = this.handleDel.bind(this)
         this.handleDrag = this.handleDrag.bind(this)
+        this.handleConfirm = this.handleConfirm.bind(this)
+        this.handleCancel = this.handleCancel.bind(this)
         this.state = {
-            group: this.props.group
+            group: this.props.group,
+            readonly: true
         }
     }
 
     handleEdit() {
-
+        this.setState({
+            readonly: false
+        })
     }
 
     handleDel() {
@@ -139,16 +145,38 @@ class GroupItem extends React.Component {
         dragHandler(group)
     }
 
+    handleConfirm() { }
+
+    handleCancel() {
+        this.setState({
+            readonly: true
+        })
+    }
+
     render() {
-        const { group } = this.state
-        return (
-            <div className='group-item'>
-                <div className='group-name'>{group.groupName}</div>
-                <div className="group-tool">
+        const { group, readonly } = this.state
+        let toolDiv;
+        if (readonly) {
+            toolDiv = (
+                <div className='group-tool'>
+                    <div className='group-name'>{group.groupName}</div>
                     <Icon className='group-edit' icon={faEdit} title='编辑' onClick={this.handleEdit} />
                     <Icon className='group-del' icon={faTimes} title='删除' onClick={this.handleDel} />
-                    <Icon className='group-sort' icon={faSort} title='拖动' onDrag={this.handleDrag} />
                 </div>
+            )
+        } else {
+            toolDiv = (
+                <div className='group-tool'>
+                    <input type='text' className='group-name' value={group.groupName} />
+                    <Icon className='group-del' icon={faTimes} title='取消' onClick={this.handleCancel} />
+                    <Icon className='group-edit' icon={faCheck} title='确认' onClick={this.handleConfirm} />
+                </div>
+            )
+        }
+        return (
+            <div className='group-item' >
+                <Icon className='group-sort' icon={faSort} title='拖动' onDrag={this.handleDrag} />
+                {toolDiv}
             </div>
         )
     }

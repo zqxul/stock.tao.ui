@@ -164,7 +164,7 @@ class GroupItem extends React.Component {
     }
 
     handleDragStart(e) {
-        console.log("drag start:" + e.target.parent())
+        console.log("drag start:" + e.target)
     }
 
     handleDrag() {
@@ -174,7 +174,7 @@ class GroupItem extends React.Component {
     }
 
     handleDragEnd(e) {
-        console.log("drag end:" + e.target.parent())
+        console.log("drag end:" + e.target)
     }
 
     handleConfirm(e) {
@@ -203,8 +203,8 @@ class GroupItem extends React.Component {
         let toolDiv = readonly ? (
             <div className='group-tool'>
                 <div className='group-name'>{group.groupName}</div>
-                <Icon className='group-edit' icon={faEdit} title='编辑' onClick={this.handleEdit} />
-                <Icon className='group-del' icon={faTimes} title='删除' onClick={this.handleDel} />
+                <div className='group-edit'><Icon icon={faEdit} title='编辑' onClick={this.handleEdit} /></div>
+                <div className='group-del'><Icon icon={faTimes} title='删除' onClick={this.handleDel} /></div>
             </div>
         ) : (
                 <div className='group-tool'>

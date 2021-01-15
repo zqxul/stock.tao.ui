@@ -73,7 +73,15 @@
     padding: 4px 0px;
 }
 
+.group-edit svg {
+    padding: 3px 0px;
+}
+
 .group-del, .group-cancel {
     flex: 1;
     padding: 3px 2px 3px 0px;
+}
+
+.group-del svg {
+    padding: 2px 0px;
 }

@@ -35,14 +35,13 @@ class GroupPanel extends React.Component {
 
     constructor(props) {
         super(props)
-        this.handleSelect = this.handleSelect.bind(this)
-        this.handleClick = this.handleClick.bind(this)
-        this.handleDrag = this.handleDrag.bind(this)
-        this.handleDel = this.handleDel.bind(this)
-        this.hideGroupOptions = this.hideGroupOptions.bind(this)
         this.state = {
             showOptions: false,
-            selectedOption: {},
+            selectedOption: {
+                groupId: '',
+                groupName: '',
+                order: 0
+            },
             groups: [
                 {
                     groupId: "1",
@@ -79,37 +78,38 @@ class GroupPanel extends React.Component {
         }
     }
 
-    handleSelect() { }
-
-    handleClick() {
-        this.hideGroupOptions()
+    handleClick = (group) => {
+        this.toggleGroupOptions()
     }
 
-    handleGroupItemClick(group) {
-        this.hideGroupOptions()
+    handleGroupItemClick = (group) => {
+        console.log('handleGroupItemClick:', group)
+        this.setState({
+            selectedOption: group
+        })
+        this.toggleGroupOptions()
     }
 
-    hideGroupOptions() {
+    toggleGroupOptions = () => {
         const { showOptions } = this.state
         this.setState({
             showOptions: !showOptions
         })
     }
 
-    componentDidMount() {
-        const { groups } = this.state
-        console.log(groups)
-        this.setState({
-            selectedOption: groups.length > 0 ? groups[0].groupId : ''
-        })
-    }
+    // componentDidMount = () => {
+    //     const { groups } = this.state
+    //     this.setState({
+    //         selectedOption: groups.length > 0 ? groups[0].groupId : ''
+    //     })
+    // }
 
-    handleDrag() {
+    handleDrag = () => {
         // const { groups } = this.state
         // todo drag logic
     }
 
-    handleDel(group) {
+    handleDel = (group) => {
         const { groups } = this.state
         let groupIndex = groups.findIndex((item) => item.groupId === group.groupId)
         if (groupIndex !== -1) {
@@ -128,10 +128,10 @@ class GroupPanel extends React.Component {
         }
         return (
             <div className='group-panel'>
-                <select className='group-option' value={selectedOption.groupName} onChange={this.handleSelect} onClick={this.handleClick} />
+                <select className='group-option' value={selectedOption.groupName} onChange={() => { }} onClick={this.handleClick} />
                 <div className='group-options' style={style}>
                     {
-                        groups.map((group) => <GroupItem key={group.groupId} group={group} clickHandler={this.handleClick} delHandler={this.handleDel} dragHandler={this.handleDrag} />)
+                        groups.map((group) => <GroupItem key={group.groupId} group={group} clickHandler={this.handleGroupItemClick} delHandler={this.handleDel} dragHandler={this.handleDrag} />)
                     }
                 </div>
             </div>
@@ -241,6 +241,13 @@ class GroupItem extends React.Component {
         })
     }
 
+    handleClick = () => {
+        console.log("click")
+        const { group } = this.state
+        const { clickHandler } = this.props
+        clickHandler(group)
+    }
+
     render() {
         const { group, readonly, draggable, cursor } = this.state
         const style = {
@@ -260,7 +267,7 @@ class GroupItem extends React.Component {
                 </div>
             )
         return (
-            <div className='group-item' draggable={draggable} onDrag={this.handleDrag} onDrop={this.handleDrop} onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} style={style}>
+            <div className='group-item' draggable={draggable} onDrag={this.handleDrag} onDrop={this.handleDrop} onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} onClick={this.handleClick} style={style}>
                 <Icon className='group-sort' style={style} icon={faSort} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} />
                 {toolDiv}
             </div>

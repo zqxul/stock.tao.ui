@@ -52,6 +52,26 @@ class GroupPanel extends React.Component {
                     groupId: "2",
                     groupName: "分组2",
                     order: 2
+                },
+                {
+                    groupId: "3",
+                    groupName: "分组分组分组分组分组分组分组3",
+                    order: 3
+                },
+                {
+                    groupId: "4",
+                    groupName: "分组4",
+                    order: 4
+                },
+                {
+                    groupId: "5",
+                    groupName: "分组5",
+                    order: 5
+                },
+                {
+                    groupId: "6",
+                    groupName: "分组6",
+                    order: 6
                 }
             ]
 
@@ -117,12 +137,16 @@ class GroupItem extends React.Component {
         super(props)
         this.handleEdit = this.handleEdit.bind(this)
         this.handleDel = this.handleDel.bind(this)
+        this.handleDragStart = this.handleDragStart.bind(this)
         this.handleDrag = this.handleDrag.bind(this)
+        this.handleDragEnd = this.handleDragEnd.bind(this)
         this.handleConfirm = this.handleConfirm.bind(this)
         this.handleCancel = this.handleCancel.bind(this)
+        this.handleChange = this.handleChange.bind(this)
         this.state = {
             group: this.props.group,
-            readonly: true
+            readonly: true,
+            draging: false
         }
     }
 
@@ -139,14 +163,33 @@ class GroupItem extends React.Component {
         delHandler(group)
     }
 
+    handleDragStart(e) {
+        console.log("drag start:" + e.target.parent())
+    }
+
     handleDrag() {
         const { group } = this.state
         const { dragHandler } = this.props
         dragHandler(group)
     }
 
-    handleConfirm() {
+    handleDragEnd(e) {
+        console.log("drag end:" + e.target.parent())
+    }
+
+    handleConfirm(e) {
         // call modify api
+        this.setState({
+            readonly: true
+        })
+    }
+
+    handleChange(e) {
+        const { group } = this.state
+        group.groupName = e.target.value
+        this.setState({
+            group: group
+        })
     }
 
     handleCancel() {
@@ -157,27 +200,22 @@ class GroupItem extends React.Component {
 
     render() {
         const { group, readonly } = this.state
-        let toolDiv;
-        if (readonly) {
-            toolDiv = (
+        let toolDiv = readonly ? (
+            <div className='group-tool'>
+                <div className='group-name'>{group.groupName}</div>
+                <Icon className='group-edit' icon={faEdit} title='编辑' onClick={this.handleEdit} />
+                <Icon className='group-del' icon={faTimes} title='删除' onClick={this.handleDel} />
+            </div>
+        ) : (
                 <div className='group-tool'>
-                    <div className='group-name'>{group.groupName}</div>
-                    <Icon className='group-edit' icon={faEdit} title='编辑' onClick={this.handleEdit} />
-                    <Icon className='group-del' icon={faTimes} title='删除' onClick={this.handleDel} />
-                </div>
-            )
-        } else {
-            toolDiv = (
-                <div className='group-tool'>
-                    <input type='text' className='group-name' value={group.groupName} />
+                    <input type='text' className='group-name' value={group.groupName} onChange={this.handleChange} />
                     <Icon className='group-cancel' icon={faTimes} title='取消' onClick={this.handleCancel} />
                     <Icon className='group-confirm' icon={faCheck} title='确认' onClick={this.handleConfirm} />
                 </div>
             )
-        }
         return (
             <div className='group-item' >
-                <Icon className='group-sort' icon={faSort} title='拖动' onDrag={this.handleDrag} />
+                <Icon className='group-sort' icon={faSort} title='拖动' onDrag={this.handleDrag} onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} />
                 {toolDiv}
             </div>
         )

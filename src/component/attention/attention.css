@@ -5,29 +5,51 @@
 .attention-header {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    text-align: center;
+    align-items: baseline;
+}
+
+.attention-logo {
+    flex: 1;
+}
+
+.attention-icon {
+    position: relative;
+    left: 2px;
+    top: 2px;
 }
 
 .group-panel {
     display: flex;
     flex-flow: column;
-    flex: 2;
+    flex: 5;
     margin: 0 10px;
     max-width: 100px;
 }
 
 .price-lasted {
-    flex: 1;
+    flex: 3;
 }
 
 .price-rise-fall {
-    flex: 1;
+    flex: 3;
 }
 
 .price-lasted, .price-rise-fall {
     font-size: xx-small;
     user-select: none;
+    text-align: left;
+}
+
+.price-sort, .percent-sort {
+    padding: 3px 15px 3px 0px;
+    flex: 1;
+}
+
+.price-header, .percent-header {
+    display: flex;
+    align-items: center;
+    flex: 3;
+    padding-left: 12px;
 }
 
 .group-options {
@@ -42,7 +64,40 @@
 }
 
 .group-option {
+    user-select: none;
     border-bottom: hidden;
+    text-rendering: auto;
+    color: -internal-light-dark(black, white);
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: flex;
+    text-align: start;
+    appearance: menulist;
+    box-sizing: border-box;
+    align-items: center;
+    white-space: pre;
+    background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
+    cursor: default;
+    font: 400 13.3333px Arial;
+    border-width: 1px;
+    border-style: solid;
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-image: initial;
+}
+
+.select-option {
+    flex: 8;
+    padding: 1px 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pulldown {
+    flex: 2;
 }
 
 .group-item {

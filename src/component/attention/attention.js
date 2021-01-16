@@ -1,7 +1,7 @@
 import React from 'react'
 import './attention.css'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faCheck, faEdit, faList, faSort, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faCheck, faEdit, faList, faSort, faSortAlphaUp, faSortNumericDown, faSortNumericDownAlt, faSortNumericUp, faSortNumericUpAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -11,19 +11,41 @@ export default class AttentionPanel extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            current: 1
+            current: 1,
+            priceAsc: true,
+            percentAsc: false
         }
     }
 
+    togglePriceSort = () => {
+        const { priceAsc } = this.state
+        this.setState({
+            priceAsc: !priceAsc
+        })
+    }
+
+    togglePercentSort = () => {
+        const { percentAsc } = this.state
+        this.setState({
+            percentAsc: !percentAsc
+        })
+    }
 
     render() {
+        const { priceAsc, percentAsc } = this.state
         return (
             <div className='attention-panel'>
                 <div className='attention-header'>
-                    <Icon className='attention-icon' icon={faList} title='关注列表' />
+                    <div className='attention-logo'><Icon className='attention-icon' icon={faList} title='关注列表' /></div>
                     <GroupPanel />
-                    <div className='price-lasted' >最新价</div>
-                    <div className='price-rise-fall'>涨跌幅</div>
+                    <div className='price-header'>
+                        <div className='price-lasted'>最新价</div>
+                        <Icon className='price-sort' icon={priceAsc ? faSortNumericUpAlt : faSortNumericDownAlt} onClick={this.togglePriceSort} />
+                    </div>
+                    <div className='price-header'>
+                        <div className='price-rise-fall'>涨跌幅</div>
+                        <Icon className='percent-sort' icon={percentAsc ? faSortNumericUpAlt : faSortNumericDownAlt} onClick={this.togglePercentSort} />
+                    </div>
                 </div>
             </div>
         )
@@ -39,7 +61,7 @@ class GroupPanel extends React.Component {
             showOptions: false,
             selectedOption: {
                 groupId: '',
-                groupName: '',
+                groupName: '自选',
                 order: 0
             },
             groups: [
@@ -82,7 +104,7 @@ class GroupPanel extends React.Component {
         this.toggleGroupOptions()
     }
 
-    handleGroupItemClick = (group) => {
+    handleSelect = (group) => {
         console.log('handleGroupItemClick:', group)
         this.setState({
             selectedOption: group
@@ -150,10 +172,13 @@ class GroupPanel extends React.Component {
         }
         return (
             <div className='group-panel'>
-                <select className='group-option' onClick={this.handleClick} />
+                <div className='group-option' onClick={this.handleClick}>
+                    <div className='select-option'>{selectedOption.groupName}</div>
+                    <Icon className='pulldown' icon={faAngleDown} />
+                </div>
                 <div className='group-options' style={style}>
                     {
-                        groups.map((group) => <GroupItem key={group.groupId} group={group} clickHandler={this.handleGroupItemClick} delHandler={this.handleDel} dragHandler={this.handleDrag} dropHandler={this.handleDrop} />)
+                        groups.map((group) => <GroupItem key={group.groupId} group={group} selectHandler={this.handleSelect} delHandler={this.handleDel} dragHandler={this.handleDrag} dropHandler={this.handleDrop} />)
                     }
                 </div>
             </div>
@@ -307,8 +332,8 @@ class GroupItem extends React.Component {
     handleClick = () => {
         console.log("click")
         const { group } = this.state
-        const { clickHandler } = this.props
-        clickHandler(group)
+        const { selectHandler } = this.props
+        selectHandler(group)
     }
 
     render() {

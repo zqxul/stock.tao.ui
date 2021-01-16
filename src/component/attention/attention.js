@@ -104,11 +104,13 @@ class GroupPanel extends React.Component {
     //     })
     // }
 
+    // 拖动
     handleDrag = () => {
         // const { groups } = this.state
         // todo drag logic
     }
 
+    // 拖放
     handleDrop = (group, targetGroupId) => {
         console.log('drop', group)
         const { groups } = this.state
@@ -116,7 +118,14 @@ class GroupPanel extends React.Component {
         let targetGroup = groups[targetGroupIndex]
         groups.splice(targetGroupIndex, 1)
         let toGroupIndex = groups.findIndex((item => item.groupId === group.groupId))
-        groups.splice(toGroupIndex, 0, targetGroup)
+        if (targetGroup.order < group.order) {
+            groups.splice(toGroupIndex + 1, 0, targetGroup)
+        } else {
+            groups.splice(toGroupIndex, 0, targetGroup)
+        }
+        groups.forEach((item, index) => {
+            item.order = index + 1
+        })
         this.setState({
             groups: groups
         })
@@ -262,35 +271,34 @@ class GroupItem extends React.Component {
         })
     }
 
-    handleMove = (e) => {
-        const { group } = this.props
-        console.log('drag', e.type, group.groupId, e.currentTarget)
-        e.dataTransfer.dropEffect = 'move'
+    // handleMove = (e) => {
+    //     const { group } = this.props
+    //     console.log('drag', e.type, group.groupId, e.currentTarget)
+    //     e.dataTransfer.dropEffect = 'move'
 
-        let top = e.currentTarget.getBoundingClientRect().top;
-        let bottom = e.currentTarget.getBoundingClientRect().bottom
-        let middle = (top + bottom) / 2;
-        console.log(e.type, 'groupId', group.groupId, 'top', top, 'bottom:', bottom, 'middle', middle,
-            'clientY', e.clientY)
-        if (top < e.clientY && e.clientY < middle) {
-            this.setState({
-                borderTop: 'solid',
-                borderBottom: 'none'
-            })
-        } else if (middle < e.clientY && e.clientY < bottom) {
-            this.setState({
-                borderTop: 'none',
-                borderBottom: 'solid'
-            })
-        } else {
-            this.setState({
-                borderTop: 'none',
-                borderBottom: 'none'
-            })
-        }
-        e.preventDefault()
-    }
-
+    //     let top = e.currentTarget.getBoundingClientRect().top;
+    //     let bottom = e.currentTarget.getBoundingClientRect().bottom
+    //     let middle = (top + bottom) / 2;
+    //     console.log(e.type, 'groupId', group.groupId, 'top', top, 'bottom:', bottom, 'middle', middle,
+    //         'clientY', e.clientY)
+    //     if (top < e.clientY && e.clientY < middle) {
+    //         this.setState({
+    //             borderTop: 'solid',
+    //             borderBottom: 'none'
+    //         })
+    //     } else if (middle < e.clientY && e.clientY < bottom) {
+    //         this.setState({
+    //             borderTop: 'none',
+    //             borderBottom: 'solid'
+    //         })
+    //     } else {
+    //         this.setState({
+    //             borderTop: 'none',
+    //             borderBottom: 'none'
+    //         })
+    //     }
+    //     e.preventDefault()
+    // }
 
     handleDragOver = (e) => {
         e.preventDefault()

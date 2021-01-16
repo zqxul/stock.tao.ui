@@ -27,6 +27,7 @@
 
 .price-lasted, .price-rise-fall {
     font-size: xx-small;
+    user-select: none;
 }
 
 .group-options {

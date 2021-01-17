@@ -1,7 +1,7 @@
 import React from 'react'
 import './attention.css'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faCheck, faEdit, faList, faSort, faSortAlphaUp, faSortNumericDown, faSortNumericDownAlt, faSortNumericUp, faSortNumericUpAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faCheck, faEdit, faList, faPlus, faSort, faSortNumericDownAlt, faSortNumericUpAlt, faSyncAlt, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 
 
@@ -40,11 +40,11 @@ export default class AttentionPanel extends React.Component {
                     <GroupPanel />
                     <div className='price-header'>
                         <div className='price-lasted'>最新价</div>
-                        <Icon className='price-sort' icon={priceAsc ? faSortNumericUpAlt : faSortNumericDownAlt} onClick={this.togglePriceSort} />
+                        <Icon className='price-sort' title={priceAsc ? '升序' : '降序'} icon={priceAsc ? faSortNumericUpAlt : faSortNumericDownAlt} onClick={this.togglePriceSort} />
                     </div>
                     <div className='price-header'>
                         <div className='price-rise-fall'>涨跌幅</div>
-                        <Icon className='percent-sort' icon={percentAsc ? faSortNumericUpAlt : faSortNumericDownAlt} onClick={this.togglePercentSort} />
+                        <Icon className='percent-sort' title={percentAsc ? '升序' : '降序'} icon={percentAsc ? faSortNumericUpAlt : faSortNumericDownAlt} onClick={this.togglePercentSort} />
                     </div>
                 </div>
             </div>
@@ -59,6 +59,7 @@ class GroupPanel extends React.Component {
         super(props)
         this.state = {
             showOptions: false,
+            showNewGroupPanel: false,
             selectedOption: {
                 groupId: '',
                 groupName: '自选',
@@ -164,23 +165,41 @@ class GroupPanel extends React.Component {
         }
     }
 
+    handleNewGroup = () => {
+        this.toggleNewGroupPanel(true)
+    }
+
+    toggleNewGroupPanel = (show) => {
+        this.setState({
+            showNewGroupPanel: show
+        })
+    }
+
     render() {
-        const { groups, showOptions, selectedOption } = this.state
+        const { groups, showOptions, selectedOption, showNewGroupPanel } = this.state
         const style = {
-            width: '100%',
             contentVisibility: showOptions === true ? 'visible' : 'hidden'
         }
         return (
             <div className='group-panel'>
-                <div className='group-option' onClick={this.handleClick}>
-                    <div className='select-option'>{selectedOption.groupName}</div>
-                    <Icon className='pulldown' icon={faAngleDown} />
+                <div className='group-option'>
+                    <div className='select-option' onClick={this.handleClick}>
+                        <div className='option-name'>{selectedOption.groupName}</div>
+                        <Icon className='pulldown' title='展开' icon={faAngleDown} />
+                    </div>
+                    <div className='option-tool'>
+                        <Icon className='group-add' title='新建' icon={faPlus} onClick={this.handleNewGroup} />
+                        <Icon className='group-refresh' title='刷新' icon={faSyncAlt} />
+                    </div>
                 </div>
                 <div className='group-options' style={style}>
                     {
                         groups.map((group) => <GroupItem key={group.groupId} group={group} selectHandler={this.handleSelect} delHandler={this.handleDel} dragHandler={this.handleDrag} dropHandler={this.handleDrop} />)
                     }
                 </div>
+                {
+                    showNewGroupPanel ? <NewGroupPanel togglePanelHandler={this.toggleNewGroupPanel} /> : null
+                }
             </div>
         )
     }
@@ -360,6 +379,58 @@ class GroupItem extends React.Component {
             <div className='group-item' draggable={draggable} onDrag={this.handleDrag} onDrop={this.handleDrop} onDragStart={this.handleDragStart} onDragEnd={this.handleDragEnd} onDragOver={this.handleDragOver} style={style}>
                 <Icon className='group-sort' icon={faSort} onMouseEnter={this.handleMouseEnter} onMouseLeave={this.handleMouseLeave} onMouseDown={this.handleMouseDown} onMouseUp={this.handleMouseUp} />
                 {toolDiv}
+            </div>
+        )
+    }
+}
+
+class NewGroupPanel extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            groupName: '',
+            isDefault: false
+        }
+    }
+
+    handleCancel = () => {
+        const { togglePanelHandler } = this.props
+        togglePanelHandler(false)
+    }
+
+    handleConfirm = () => {
+        const { togglePanelHandler } = this.props
+        togglePanelHandler(false)
+    }
+
+    changeGroupName = (e) => {
+        this.setState({
+            groupName: e.target.value
+        })
+    }
+
+    changeIsDefault = (e) => {
+        console.log(e.target.value)
+        this.setState({
+            isDefault: e.target.value
+        })
+    }
+
+    render() {
+        return (
+            <div className='group-add-panel'>
+                <form className='group-add-form'>
+                    <input type='text' className='new-group-name' onChange={this.changeGroupName} />
+                    <div className='group-default'>
+                        <input type='checkbox' id='group-default-box' className='group-default-box' onChange={this.changeIsDefault} />
+                        <label className='group-default-label' htmlFor='group-default-box'>默认</label>
+                    </div>
+                </form>
+                <div className='group-add-tool'>
+                    <Icon className='group-cancel' icon={faTimes} title='取消' onClick={this.handleCancel} />
+                    <Icon className='group-confirm' icon={faCheck} title='确认' onClick={this.handleConfirm} />
+                </div>
             </div>
         )
     }

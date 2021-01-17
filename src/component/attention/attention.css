@@ -21,9 +21,9 @@
 .group-panel {
     display: flex;
     flex-flow: column;
-    flex: 5;
-    margin: 0 10px;
-    max-width: 100px;
+    flex: 6;
+    /* margin: 0 10px; */
+    max-width: 150px;
 }
 
 .price-lasted {
@@ -49,7 +49,6 @@
     display: flex;
     align-items: center;
     flex: 3;
-    padding-left: 12px;
 }
 
 .group-options {
@@ -66,38 +65,58 @@
 .group-option {
     user-select: none;
     border-bottom: hidden;
-    text-rendering: auto;
+    display: flex;
+    align-items: center;
+    border-width: 1px;
+    border-style: solid;
+    /* text-rendering: auto;
     color: -internal-light-dark(black, white);
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
     text-indent: 0px;
     text-shadow: none;
-    display: flex;
     text-align: start;
     appearance: menulist;
     box-sizing: border-box;
-    align-items: center;
     white-space: pre;
     background-color: -internal-light-dark(rgb(255, 255, 255), rgb(59, 59, 59));
     cursor: default;
     font: 400 13.3333px Arial;
-    border-width: 1px;
-    border-style: solid;
     border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
-    border-image: initial;
+    border-image: initial; */
 }
 
 .select-option {
-    flex: 8;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 7;
+}
+
+.option-tool {
+    display: flex;
+    flex: 3;
+    justify-content: center;
+    align-items: center;
+}
+
+.option-name {
+    flex: 5;
     padding: 1px 2px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: x-small;
 }
 
 .pulldown {
     flex: 2;
+}
+
+.group-add, .group-refresh {
+    flex: 1;
+    padding: 3px 1px;
 }
 
 .group-item {
@@ -117,7 +136,7 @@
 }
 
 .group-name {
-    flex: 5;
+    flex: 6;
     font-size: xx-small;
     text-align: left;
     padding: 4px 0px;
@@ -125,8 +144,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 45px;
+    max-width: 60px;
     user-select: none;
+    font-size: xx-small;
 }
 
 .group-sort {
@@ -135,7 +155,7 @@
 }
 
 .group-edit, .group-confirm {
-    flex: 1;
+    flex: 2;
     padding: 4px 0px;
 }
 
@@ -144,10 +164,61 @@
 }
 
 .group-del, .group-cancel {
-    flex: 1;
+    flex: 2;
     padding: 3px 2px 3px 0px;
 }
 
 .group-del svg {
     padding: 2px 0px;
+}
+
+.group-add-panel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5px;
+}
+
+.group-add-form {
+    display: flex;
+    flex: 12;
+    justify-content: center;
+    align-items: center;
+}
+
+.group-add-form input {
+    width: 100%;
+}
+
+.new-group-name {
+    flex: 6;
+}
+
+.group-default {
+    flex: 4;
+    font-size: xx-small;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 3px;
+}
+
+.group-default input[type='checkbox'] {
+    width: fit-content;
+}
+
+.group-default-box {
+    flex: 3;
+}
+
+.group-default-label {
+    flex: 7;
+    padding-left: 2px;
+}
+
+.group-add-tool {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 2
 }

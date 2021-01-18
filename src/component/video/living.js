@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class LiveVideo extends React.Component {
+export default class LivingVideo extends React.Component {
 
     constructor(props) {
         super(props)
@@ -17,10 +17,14 @@ export default class LiveVideo extends React.Component {
         window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
 
         if (navigator.getUserMedia) {
-            navigator.getUserMedia({
+            navigator.mediaDevices.getUserMedia({
                 video: true,
                 audio: false
-            }, this.handleSuccess, this.handleError);
+            }).then((stream) => {
+                this.handleSuccess(stream)
+            }).catch((err) => {
+                this.handleSuccess(err)
+            });
         } else {
             alert('getUserMedia is not supported in this browser.');
         }
@@ -28,8 +32,8 @@ export default class LiveVideo extends React.Component {
 
     handleSuccess = (stream) => {
         let video = document.getElementById('webcam')
-        video.autoplay = true;
-        video.src = window.URL.createObjectURL(stream);
+        video.autoplay = false;
+        video.srcObject = stream;
     }
 
     handleError = (error) => {

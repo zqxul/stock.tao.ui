@@ -56,7 +56,7 @@ header {
 }
 
 .attention-panel {
-    grid-column: 1 / 8;
+    grid-column: 1 / 4;
     grid-row: 15 / 31;
     border: 1px solid black;
 }

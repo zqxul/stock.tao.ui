@@ -1,0 +1,33 @@
+syntax="proto3";
+
+import "google/protobuf/any.proto";
+
+option go_package=".;user";
+
+message PbStockTao { 
+    int32 code = 1;
+    string msg = 2;
+    google.protobuf.Any data = 3;
+}
+
+message PbRegisterRequest{
+    string username=1;
+    string password=2;
+    string email =3;
+    string nickname = 4;
+}
+
+message PbLoginRequest{
+    string username=1;
+    string password=2;
+    string verifyCode=3;
+}
+
+
+service PbUser {
+
+    rpc Login (PbLoginRequest) returns (PbStockTao);
+
+    rpc Register (PbRegisterRequest) returns (PbStockTao);
+
+}

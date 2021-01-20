@@ -28,5 +28,5 @@ export const MenuList = [
         icon: '/live128.svg',
         desc: '直播语音讨论交流互动'
     }
-        
+
 ]

@@ -5,7 +5,7 @@ import SearchPanel from './component/search/search'
 import { MenuList } from './config'
 import LivingVideo from './component/media/living'
 import Call from './component/media/call';
-import CallPanel, { UserPanel } from './component/media/call';
+import CallPanel from './component/media/call';
 
 function App() {
   return (

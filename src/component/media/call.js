@@ -5,38 +5,98 @@ export default class CallPanel extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            mediaConstraints: {
-                video: true,
-                audio: true
-            }
+            users: []
         }
     }
 
     handleClick = (username) => {
-        const { mediaConstraints, peerConnection } = this.state
+        let { peerConnection } = this.state
         if (peerConnection) {
             alert('you cannot start a call because you have already one open')
             return
         }
-        this.setState({
-            peerConnection: new RTCPeerConnection(mediaConstraints)
+        peerConnection = new RTCPeerConnection({
+            video: true,
+            audio: true
         })
-        this.dial(username)
+        if (this.dial(username, peerConnection)) {
+            this.setState({
+                peerConnection: peerConnection
+            })
+        }
+        peerConnection.onicecandidate = this.handleICECandidateEvent
+        peerConnection.oniceconnectionstatechange = this.handleICEConnectionStateChangeEvent
+        peerConnection.onicegatheringstatechange = this.handleICEGatheringStateChangeEvent
+        peerConnection.onsignalingstatechange = this.handleSignalingStateChangeEvent
+        peerConnection.onnegotiationneeded = this.handleNegotiationNeededEvent
+        peerConnection.ontrack = this.handleTrackEvent
+
+        peerConnection.onopen = this.handleOpen
+        peerConnection.onerror = this.handleError
+        peerConnection.onmessage = this.handleMessage
     }
 
-    dial = (username) => {
-        const { peerConnection } = this.state
-        if (peerConnection) {
+    dial = (username, peerConnection) => {
 
-        }
+    }
+
+    login = () => {
+        let input = document.getElementById('username');
+    }
+
+    refresh = () => {
+
+    }
+
+    handleMessage = (e) => {
+        let msg = JSON.parse(e.data)
+        console.log('message comming:', msg)
+    }
+
+    handleError = (e) => {
+        console.log('error happend:', e)
+    }
+
+    handleOpen = (e) => {
+        console.log('connection opened:', e)
+    }
+
+    handleICECandidateEvent = () => {
+
+    }
+
+    handleICEConnectionStateChangeEvent = () => {
+
+    }
+
+    handleICEGatheringStateChangeEvent = () => {
+
+    }
+
+    handleSignalingStateChangeEvent = () => {
+
+    }
+
+    handleNegotiationNeededEvent = () => {
+
+    }
+
+    handleTrackEvent = () => {
+
     }
 
     render() {
+        const { users } = this.state
         return (
-            < div >
-                <UserPanel users={[{ username: 'a' }, { username: 'b' }]} clickHanlder={this.handleClick} />
-                <video id='caller' autoPlay controls muted width='150'></video>
-                <video id='callee' autoPlay controls width='500'></video>
+            <div>
+                <div className='login' style={{ display: 'flex' }}>
+                    <input id='username' type='text' placeholder='请输入用户名'></input>
+                    <button onClick={this.login}>登录</button>
+                    <button onClick={this.refresh}>刷新</button>
+                </div>
+                <UserPanel users={users} clickHanlder={this.handleClick} />
+                <video id='caller' autoPlay controls muted width='50%'></video>
+                <video id='callee' autoPlay controls width='100%'></video>
                 <button onClick={this.handlePlay}>播放</button>
             </div >
         )

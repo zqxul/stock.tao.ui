@@ -1,0 +1,25 @@
+.landing-panel {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+
+.landing-header {
+    display: flex;
+    align-items: flex-end;
+    flex: 1;
+    padding: 2px;
+}
+
+.landing-body {
+    flex: 8;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.landing-footer {
+    flex: 1;
+    padding: 2px;
+}

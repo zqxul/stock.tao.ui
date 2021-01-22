@@ -1,4 +1,5 @@
 import React from 'react'
+import './form.css'
 
 export class LoginForm extends React.Component {
 
@@ -40,21 +41,23 @@ export class LoginForm extends React.Component {
     render() {
         return (
             <form className='login-form'>
-                <div className='username-row'>
+                <div className='login-row username-row'>
                     <label className='username-lable' htmlFor='username'>登录名</label>
                     <input id='username' type='text' placeholder='用户名或邮箱地址' onChange={this.changeUsername} />
                 </div>
-                <div className='password-row'>
+                <div className='login-row password-row'>
                     <label className='password-label' htmlFor='password' onChange={this.changePassword}>密码</label>
                     <input id='password' type='password' />
                 </div>
-                <div className='rememberMe-row' onChange={this.changeRemberMe}>
-                    <input type='checkbox' />
-                    <label>记住我</label>
-                </div>
-                <div className='btn-row'>
-                    <button onClick={this.handleForget}>忘记密码</button>
-                    <button onClick={this.handleLogin}>登录</button>
+                <div className='login-row' onChange={this.changeRemberMe}>
+                    <div className='remember-me'>
+                        <input id='rememberMe' type='checkbox' />
+                        <label htmlFor='rememberMe'>记住我</label>
+                    </div>
+                    <div className='login-btn'>
+                        <button onClick={this.handleForget}>忘记密码</button>
+                        <button onClick={this.handleLogin}>登录</button>
+                    </div>
                 </div>
             </form>
         )
@@ -78,25 +81,25 @@ export class RegisterForm extends React.Component {
     render() {
         return (
             <form className='register-form'>
-                <div className='username-row'>
+                <div className='register-row username-row'>
                     <label className='username-lable' htmlFor='username'>用户名</label>
                     <input id='username' name='username' type='text' />
                 </div>
-                <div className='nickname-row'>
+                <div className='register-row nickname-row'>
                     <label className='username-lable' htmlFor='nickname'>昵称</label>
                     <input id='nickname' name='nickname' type='text' />
                 </div>
-                <div className='email-row'>
+                <div className='register-row email-row'>
                     <label className='email-lable' htmlFor='email'>邮箱</label>
                     <input id='email' name='email' type='email' />
                 </div>
-                <div className='password-row'>
+                <div className='register-row password-row'>
                     <label className='password-label' htmlFor='password'>密码</label>
-                    <password id='password' />
+                    <input id='password' type='password' />
                 </div>
-                <div className='password-row'>
+                <div className='register-row password-row'>
                     <label className='password-label' htmlFor='password'>确认密码</label>
-                    <password id='repassword' />
+                    <input id='repassword' type='password' />
                 </div>
                 <div className='btn-row'>
                     <button onClick={this.handleRegister}>提交</button>

@@ -29,14 +29,15 @@ export default class LandingPanel extends React.Component {
             <div className='landing-panel'>
                 <div className='landing-header'>
                     <LandingTab tabName='login' landingHandler={this.handleLogin} />
+                    <div>|</div>
                     <LandingTab tabName='register' landingHandler={this.handleRegister} />
                 </div>
                 <div className='landing-body'>
                     {tab === 'login' ? <LoginForm /> : <RegisterForm />}
                 </div>
-                <div className='landing-footer'>
+                {/* <div className='landing-footer'>
                     Welcome to Mars!
-                </div>
+                </div> */}
             </div>
         )
     }

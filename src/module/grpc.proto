@@ -21,6 +21,7 @@ message PbLoginRequest{
     string username=1;
     string password=2;
     string verifyCode=3;
+    bool rememberMe=4;
 }
 
 

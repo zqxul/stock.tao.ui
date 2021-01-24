@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
   <React.StrictMode>
     {/* <App /> */}
-    <div class='landing'><LandingPanel /></div>
+    <div className='landing'><LandingPanel /></div>
   </React.StrictMode>,
   document.getElementById('root')
 );

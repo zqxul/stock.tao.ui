@@ -29,9 +29,9 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
+    "extends": "react-app",
+    "ignorePatterns": [
+      "**/*_pb.js"
     ]
   },
   "browserslist": {
@@ -49,11 +49,5 @@
   "devDependencies": {
     "@babel/plugin-transform-typescript": "^7.12.1",
     "video.js": "^7.10.2"
-  },
-  "eslintConfig": {
-    "extends": "react-app",
-    "ignorePatterns": [
-      "**/*_pb.js"
-    ]
   }
 }

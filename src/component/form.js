@@ -1,5 +1,5 @@
 import React from 'react'
-import { PbUserPromiseClient } from '../module/user_grpc_web_pb'
+import { PbUserClient } from '../module/user_grpc_web_pb'
 import { PbLoginRequest } from '../module/user_pb'
 import './form.css'
 
@@ -20,17 +20,20 @@ export class LoginForm extends React.Component {
 
     handleLogin = () => {
         const { username, password, verifycode, rememberMe } = this.state
-        let UserClient = new PbUserPromiseClient('localhost:8081')
+        let UserClient = new PbUserClient('http://localhost:8081')
         let loginRequest = new PbLoginRequest()
         loginRequest.setUsername(username)
         loginRequest.setPassword(password)
         loginRequest.setVerifycode(verifycode)
         loginRequest.setRememberme(rememberMe)
-        UserClient.login(loginRequest)
-            .then(response => {
-                console.log('----')
-                console.log(response)
-            })
+        let loginResponse = UserClient.login(loginRequest, {}, (err, response) => {
+            console.log('----error-----', err)
+            console.log('---', loginResponse)
+            console.log('---', loginResponse.code)
+
+            console.log('---', loginResponse.msg)
+        })
+
     }
 
     changeUsername = (e) => {

@@ -17,6 +17,10 @@ message PbRegisterRequest{
     string nickname = 4;
 }
 
+message PbRegisterResponse{
+    string userID=1;
+}
+
 message PbLoginRequest{
     string username=1;
     string password=2;

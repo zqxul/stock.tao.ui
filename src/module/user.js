@@ -1,40 +1,91 @@
-import { loadSync } from 'protobufjs'
-import { grpc } from 'grpc-web'
+import { load } from 'protobufjs'
+import * as gprc from 'grpc-web'
 
-var Root = loadSync('./user.proto')
+export const UserProto = {}
+load('./user.proto').then(root => {
+    UserProto.PbStockTao = root.lookupType('PbStockTao')
+    UserProto.PbLoginRequest = root.lookupType('PbLoginRequest')
+    UserProto.PbRegisterRequest = root.lookupType('PbRegisterRequest')
+    UserProto.PbRegisterResponse = root.lookupType('PbRegisterResponse')
+    console.log('load user.proto success')
+}).catch((err) => {
+    console.log('load user.proto error:', err)
+})
 
-const PbUser = Root.lookupService('PbUser')
-const Client = grpc.makeGenericClientConstructor({})
+export default class UserClient {
 
+    constructor(hostname, credentials, options) {
+        if (!options) options = {};
+        options['format'] = 'binary';
+        this.client = new gprc.GrpcWebClientBase(options)
+        this.hostname = hostname
+    }
 
-const client = new Client(
-    'localhost:8090',
-    grpc.credentials.createInsecure()
-)
-const rpcImpl = function (method, requestData, callback) {
-    client.makeUnaryRequest(
-        method.name,
-        arg => arg,
-        arg => arg,
-        requestData,
-        callback
-    )
-}
-const userService = PbUser.create(rpcImpl, true, true)
+    login = (request, metadata, callback) => {
+        return this.client.rpcCall(
+            this.hostname + '/User/Login',
+            request,
+            metadata || {},
+            new gprc.MethodDescriptor(
+                '/User/Login',
+                null,
+                UserProto.PbLoginRequest,
+                UserProto.PbStockTao,
+                message => UserProto.PbLoginRequest.encode(message).finish(),
+                buffer => UserProto.PbStockTao.decode(buffer)
+            ),
+            callback
+        )
+    }
 
-export function login(username, passowrd, rememberMe, verifyCode) {
-    userService.login({
-        username: username,
-        passowrd: passowrd,
-        rememberMe: rememberMe,
-        verifyCode: verifyCode
-    }).then((result) => {
-        console.log('-------', result)
-        console.log('-------', result.code)
-        console.log('-------', result.msg)
-    }).catch((err) => {
-        console.log('------- err:', err)
-    });
+    promiseLogin = (request, metadata) => {
+        return this.client.thenableCall(
+            this.hostname + '/User/Login',
+            request,
+            metadata || {},
+            new gprc.MethodDescriptor(
+                '/User/Login',
+                null,
+                UserProto.PbLoginRequest,
+                UserProto.PbStockTao,
+                message => UserProto.PbLoginRequest.encode(message).finish(),
+                buffer => UserProto.PbStockTao.decode(buffer)
+            )
+        )
+    }
+
+    register = (request, metadata, callback) => {
+        return this.client.rpcCall(
+            this.hostname + '/User/Register',
+            request,
+            metadata || {},
+            new gprc.MethodDescriptor(
+                '/User/Register',
+                null,
+                UserProto.PbLoginRequest,
+                UserProto.PbStockTao,
+                message => UserProto.PbRegisterRequest.encode(message).finish(),
+                buffer => UserProto.PbStockTao.decode(buffer)
+            ),
+            callback
+        )
+    }
+
+    promiseRegister = (request, metadata) => {
+        return this.client.thenableCall(
+            this.hostname + '/User/Register',
+            request,
+            metadata || {},
+            new gprc.MethodDescriptor(
+                '/User/Register',
+                null,
+                UserProto.PbLoginRequest,
+                UserProto.PbStockTao,
+                message => UserProto.PbRegisterRequest.encode(message).finish(),
+                buffer => UserProto.PbStockTao.decode(buffer)
+            )
+        )
+    }
 }
 
 

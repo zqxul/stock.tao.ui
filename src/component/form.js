@@ -1,8 +1,8 @@
 import React from 'react'
-import { PbUserClient } from '../module/user_grpc_web_pb'
-import { PbLoginRequest } from '../module/user_pb'
+// import { PbUserClient } from '../module/user_grpc_web_pb'
+// import { PbLoginRequest } from '../module/user_pb'
 import './form.css'
-import { login } from '../module/user'
+import { UserProto } from '../module/user'
 
 export class LoginForm extends React.Component {
 
@@ -34,8 +34,26 @@ export class LoginForm extends React.Component {
 
         //     console.log('---', loginResponse.msg)
         // })
-        const { username, password, rememberMe, verifyCode } = this.props
-        login(username, password, rememberMe, verifyCode)
+        const { username, password, rememberMe, verifyCode } = this.state
+        const { client } = this.props
+        console.log('userproto:', UserProto)
+        console.log('request', UserProto.PbLoginRequest)
+        let loginRequest = UserProto.PbLoginRequest.create({
+            username: username,
+            password: password,
+            rememberMe: rememberMe,
+            verifyCode: verifyCode
+        })
+        client.login(loginRequest, {}, (err, res) => {
+            if (err) {
+                console.log('login error:', err)
+            }
+            const { code, msg, data } = res
+            console.log("code:", code)
+            console.log("msg:", msg)
+            console.log("data:", data)
+            console.log('res:', res)
+        })
 
     }
 

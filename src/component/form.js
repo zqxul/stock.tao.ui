@@ -2,6 +2,7 @@ import React from 'react'
 import { PbUserClient } from '../module/user_grpc_web_pb'
 import { PbLoginRequest } from '../module/user_pb'
 import './form.css'
+import { login } from '../module/user'
 
 export class LoginForm extends React.Component {
 
@@ -19,20 +20,22 @@ export class LoginForm extends React.Component {
     }
 
     handleLogin = () => {
-        const { username, password, verifycode, rememberMe } = this.state
-        let UserClient = new PbUserClient('http://localhost:8081')
-        let loginRequest = new PbLoginRequest()
-        loginRequest.setUsername(username)
-        loginRequest.setPassword(password)
-        loginRequest.setVerifycode(verifycode)
-        loginRequest.setRememberme(rememberMe)
-        let loginResponse = UserClient.login(loginRequest, {}, (err, response) => {
-            console.log('----error-----', err)
-            console.log('---', loginResponse)
-            console.log('---', loginResponse.code)
+        // const { username, password, verifycode, rememberMe } = this.state
+        // let UserClient = new PbUserClient('http://localhost:8081')
+        // let loginRequest = new PbLoginRequest()
+        // loginRequest.setUsername(username)
+        // loginRequest.setPassword(password)
+        // loginRequest.setVerifycode(verifycode)
+        // loginRequest.setRememberme(rememberMe)
+        // let loginResponse = UserClient.login(loginRequest, {}, (err, response) => {
+        //     console.log('----error-----', err)
+        //     console.log('---', loginResponse)
+        //     console.log('---', loginResponse.code)
 
-            console.log('---', loginResponse.msg)
-        })
+        //     console.log('---', loginResponse.msg)
+        // })
+        const { username, password, rememberMe, verifyCode } = this.props
+        login(username, password, rememberMe, verifyCode)
 
     }
 

@@ -1,18 +1,37 @@
-import { load } from 'protobufjs'
+import { load, Method } from 'protobufjs'
 import * as gprc from 'grpc-web'
+// @ts-ignore
+import proto from './user.proto'
 
-export const UserProto = {}
-load('./user.proto').then(root => {
-    UserProto.PbStockTao = root.lookupType('PbStockTao')
-    UserProto.PbLoginRequest = root.lookupType('PbLoginRequest')
-    UserProto.PbRegisterRequest = root.lookupType('PbRegisterRequest')
-    UserProto.PbRegisterResponse = root.lookupType('PbRegisterResponse')
-    console.log('load user.proto success')
-}).catch((err) => {
-    console.log('load user.proto error:', err)
-})
+const UserProto = {
+    load: false
+}
+
+export function loadUserProto() {
+    if (!UserProto.load) {
+        console.log('start loading user.proto')
+        load(proto).then(root => {
+            UserProto.PbStockTao = root.lookupType('PbStockTao')
+            UserProto.PbLoginRequest = root.lookupType('PbLoginRequest')
+            UserProto.PbRegisterRequest = root.lookupType('PbRegisterRequest')
+            UserProto.PbRegisterResponse = root.lookupType('PbRegisterResponse')
+            let PbUser = root.lookupService('PbUser')
+            let userService = PbUser.create((method, requestData, callback) => {
+
+            }, false, false)
+            userService.rpcCall
+            UserProto.load = true
+            console.log('load user.proto success')
+        }).catch(err => {
+            console.log('load user.proto error:', err)
+        })
+    }
+    return UserProto
+}
 
 export default class UserClient {
+
+    UserProto = loadUserProto()
 
     constructor(hostname, credentials, options) {
         if (!options) options = {};
@@ -28,7 +47,7 @@ export default class UserClient {
             metadata || {},
             new gprc.MethodDescriptor(
                 '/User/Login',
-                null,
+                'UNARY',
                 UserProto.PbLoginRequest,
                 UserProto.PbStockTao,
                 message => UserProto.PbLoginRequest.encode(message).finish(),
@@ -45,7 +64,7 @@ export default class UserClient {
             metadata || {},
             new gprc.MethodDescriptor(
                 '/User/Login',
-                null,
+                'UNARY',
                 UserProto.PbLoginRequest,
                 UserProto.PbStockTao,
                 message => UserProto.PbLoginRequest.encode(message).finish(),
@@ -61,7 +80,7 @@ export default class UserClient {
             metadata || {},
             new gprc.MethodDescriptor(
                 '/User/Register',
-                null,
+                'UNARY',
                 UserProto.PbLoginRequest,
                 UserProto.PbStockTao,
                 message => UserProto.PbRegisterRequest.encode(message).finish(),
@@ -78,7 +97,7 @@ export default class UserClient {
             metadata || {},
             new gprc.MethodDescriptor(
                 '/User/Register',
-                null,
+                'UNARY',
                 UserProto.PbLoginRequest,
                 UserProto.PbStockTao,
                 message => UserProto.PbRegisterRequest.encode(message).finish(),

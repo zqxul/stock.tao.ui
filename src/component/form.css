@@ -25,11 +25,8 @@
     flex: 1;
 }
 
-.login-btn {
+.login-form-btn {
     flex: 2;
-}
-
-.login-btn {
     display: flex;
     justify-content: space-evenly;
     align-items: center;

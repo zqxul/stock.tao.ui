@@ -1,9 +1,7 @@
 import React from 'react'
-// import { PbUserClient } from '../module/user_grpc_web_pb'
-// import { PbLoginRequest } from '../module/user_pb'
 import './form.css'
-import { UserProto } from '../module/user'
-
+import { loadUserProto } from '../module/user'
+const UserProto = loadUserProto()
 export class LoginForm extends React.Component {
 
     constructor(props) {
@@ -15,29 +13,14 @@ export class LoginForm extends React.Component {
         }
     }
 
-    handleForget = () => {
-
+    handleForget = (e) => {
+        console.log('forget password')
+        e.preventDefault()
     }
 
-    handleLogin = () => {
-        // const { username, password, verifycode, rememberMe } = this.state
-        // let UserClient = new PbUserClient('http://localhost:8081')
-        // let loginRequest = new PbLoginRequest()
-        // loginRequest.setUsername(username)
-        // loginRequest.setPassword(password)
-        // loginRequest.setVerifycode(verifycode)
-        // loginRequest.setRememberme(rememberMe)
-        // let loginResponse = UserClient.login(loginRequest, {}, (err, response) => {
-        //     console.log('----error-----', err)
-        //     console.log('---', loginResponse)
-        //     console.log('---', loginResponse.code)
-
-        //     console.log('---', loginResponse.msg)
-        // })
+    handleLogin = (e) => {
         const { username, password, rememberMe, verifyCode } = this.state
         const { client } = this.props
-        console.log('userproto:', UserProto)
-        console.log('request', UserProto.PbLoginRequest)
         let loginRequest = UserProto.PbLoginRequest.create({
             username: username,
             password: password,
@@ -48,13 +31,9 @@ export class LoginForm extends React.Component {
             if (err) {
                 console.log('login error:', err)
             }
-            const { code, msg, data } = res
-            console.log("code:", code)
-            console.log("msg:", msg)
-            console.log("data:", data)
             console.log('res:', res)
         })
-
+        e.preventDefault()
     }
 
     changeUsername = (e) => {
@@ -80,7 +59,7 @@ export class LoginForm extends React.Component {
             <form className='login-form'>
                 <div className='login-row username-row'>
                     <label className='username-lable' htmlFor='username'>登录名</label>
-                    <input id='username' type='text' placeholder='用户名或邮箱地址' onChange={this.changeUsername} />
+                    <input id='username' type='text' placeholder='用户名或邮箱' onChange={this.changeUsername} />
                 </div>
                 <div className='login-row password-row'>
                     <label className='password-label' htmlFor='password' onChange={this.changePassword}>密码</label>
@@ -91,7 +70,7 @@ export class LoginForm extends React.Component {
                         <input id='rememberMe' type='checkbox' />
                         <label htmlFor='rememberMe'>记住我</label>
                     </div>
-                    <div className='login-btn'>
+                    <div className='login-form-btn'>
                         <button onClick={this.handleForget}>忘记密码</button>
                         <button onClick={this.handleLogin}>登录</button>
                     </div>

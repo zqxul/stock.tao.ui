@@ -7,8 +7,15 @@ import { MenuList } from './config'
 import LivingVideo from './component/media/living'
 import Call from './component/media/call';
 import CallPanel from './component/media/call';
+import LandingPanel from './component/panel'
+import { connect } from "react-redux";
 
-export default class App extends React.Component {
+const mapState = (state, ownProps) => {
+  const { user } = state
+  return { user: user }
+}
+
+export class App extends React.Component {
 
   constructor(props) {
     super(props)
@@ -18,7 +25,9 @@ export default class App extends React.Component {
   componentDidMount() { }
 
   render() {
-    return (
+    const { info } = this.props
+    return info === undefined || info === null ?
+      <div className='landing'><LandingPanel /></div> :
       <>
         <Nav menus={MenuList} size='lg' />
         <main>
@@ -35,6 +44,8 @@ export default class App extends React.Component {
           <div className='comment'>comment</div>
         </main>
       </>
-    );
   }
 }
+
+export default connect(mapState, null)(App)
+

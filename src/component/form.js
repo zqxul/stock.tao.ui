@@ -1,15 +1,18 @@
 import React from 'react'
 import './form.css'
-import { loadUserProto } from '../module/user'
+import { loadUserProto } from '../module/user/user'
+import { connect } from 'react-redux'
+import { save, refresh, clear } from "../module/user/slice";
 const UserProto = loadUserProto()
+
+const mapDispatcher = {}
+
 export class LoginForm extends React.Component {
 
     constructor(props) {
         super(props)
         this.state = {
-            username: '',
-            password: '',
-            rememberMe: false
+
         }
     }
 
@@ -27,12 +30,17 @@ export class LoginForm extends React.Component {
             rememberMe: rememberMe,
             verifyCode: verifyCode
         })
-        client.login(loginRequest, {}, (err, res) => {
+        client.login(loginRequest, {}).then((res) => {
+            if (res.code && res.code === 200) {
+                save(res.data)
+            } else {
+                alert(res.msg)
+            }
+        }).catch((err) => {
             if (err) {
                 console.log('login error:', err)
             }
-            console.log('res:', res)
-        })
+        });
         e.preventDefault()
     }
 
@@ -49,6 +57,7 @@ export class LoginForm extends React.Component {
     }
 
     changeRemberMe = (e) => {
+        console.log("e:", e.target.value)
         this.setState({
             rememberMe: e.target.value
         })
@@ -63,11 +72,11 @@ export class LoginForm extends React.Component {
                 </div>
                 <div className='login-row password-row'>
                     <label className='password-label' htmlFor='password' onChange={this.changePassword}>密码</label>
-                    <input id='password' type='password' />
+                    <input id='password' type='password' placeholder='长度不能少于8位' />
                 </div>
-                <div className='login-row' onChange={this.changeRemberMe}>
+                <div className='login-row'>
                     <div className='remember-me'>
-                        <input id='rememberMe' type='checkbox' />
+                        <input id='rememberMe' type='checkbox' onChange={this.changeRemberMe} />
                         <label htmlFor='rememberMe'>记住我</label>
                     </div>
                     <div className='login-form-btn'>
@@ -78,7 +87,6 @@ export class LoginForm extends React.Component {
             </form>
         )
     }
-
 }
 
 export class RegisterForm extends React.Component {
@@ -90,8 +98,59 @@ export class RegisterForm extends React.Component {
         }
     }
 
-    handleRegister = () => {
+    changeUsername = (e) => {
+        this.setState({
+            username: e.target.value
+        })
+    }
 
+    changePassword = (e) => {
+        this.setState({
+            password: e.target.value
+        })
+    }
+
+    changeEmail = (e) => {
+        this.setState({
+            email: e.target.value
+        })
+    }
+
+    changeNickname = (e) => {
+        this.setState({
+            nickname: e.target.value
+        })
+    }
+
+    changeRepassword = (e) => {
+        const { password } = this.state
+        if (password !== e.target.value) {
+            alert('repassword not equal to password')
+        }
+    }
+
+    handleRegister = (e) => {
+        const { username, email, password, nickname } = this.state
+        const { client } = this.props
+        let registerRequest = UserProto.PbRegisterRequest.create({
+            username: username,
+            password: password,
+            email: email,
+            nickname: nickname
+        })
+        client.register(registerRequest, {}).then((res) => {
+            if (res.code && res.code === 200) {
+                save(res.data)
+                alert('register success')
+            } else {
+                alert(res.msg)
+            }
+        }).catch((err) => {
+            if (err) {
+                console.log('register error:', err)
+            }
+        });
+        e.preventDefault()
     }
 
     render() {
@@ -99,23 +158,23 @@ export class RegisterForm extends React.Component {
             <form className='register-form'>
                 <div className='register-row username-row'>
                     <label className='username-lable' htmlFor='username'>用户名</label>
-                    <input id='username' name='username' type='text' />
+                    <input id='username' name='username' type='text' onChange={this.changeUsername} />
                 </div>
                 <div className='register-row nickname-row'>
                     <label className='username-lable' htmlFor='nickname'>昵称</label>
-                    <input id='nickname' name='nickname' type='text' />
+                    <input id='nickname' name='nickname' type='text' onChange={this.changeNickname} />
                 </div>
                 <div className='register-row email-row'>
                     <label className='email-lable' htmlFor='email'>邮箱</label>
-                    <input id='email' name='email' type='email' />
+                    <input id='email' name='email' type='email' onChange={this.changeEmail} />
                 </div>
                 <div className='register-row password-row'>
                     <label className='password-label' htmlFor='password'>密码</label>
-                    <input id='password' type='password' />
+                    <input id='password' type='password' placeholder='长度不能少于8位' onChange={this.changePassword} />
                 </div>
                 <div className='register-row password-row'>
-                    <label className='password-label' htmlFor='password'>确认密码</label>
-                    <input id='repassword' type='password' />
+                    <label className='password-label' htmlFor='repassword'>确认密码</label>
+                    <input id='repassword' type='password' placeholder='再次输入密码' onChange={this.changeRepassword} />
                 </div>
                 <div className='btn-row'>
                     <button onClick={this.handleRegister}>提交</button>
@@ -125,3 +184,5 @@ export class RegisterForm extends React.Component {
     }
 
 }
+
+export default connect(null, mapDispatcher)(LoginForm)

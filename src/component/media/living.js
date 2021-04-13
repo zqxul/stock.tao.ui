@@ -23,7 +23,7 @@ export default class LivingVideo extends React.Component {
             }).then((stream) => {
                 this.handleSuccess(stream)
             }).catch((err) => {
-                this.handleSuccess(err)
+                this.handleError(err)
             });
         } else {
             alert('getUserMedia is not supported in this browser.');

@@ -1,43 +1,43 @@
 import React from 'react';
+import RTCClient from './rtc';
 
 export default class CallPanel extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            users: []
-        }
-    }
-
-    handleClick = (username) => {
-        let { peerConnection } = this.state
-        if (peerConnection) {
-            alert('you cannot start a call because you have already one open')
-            return
-        }
-        peerConnection = new RTCPeerConnection({
-            video: true,
-            audio: true
+        let rtcpc = new RTCPeerConnection({
+            iceServers:[{
+                urls:['stock.tao']
+            }],
         })
-        if (this.dial(username, peerConnection)) {
-            this.setState({
-                peerConnection: peerConnection
-            })
+        rtcpc.onicecandidate = (e) => {}
+        rtcpc.oniceconnectionstatechange = ()=>{}
+        rtcpc.onicegatheringstatechange = ()=>{}
+        rtcpc.onsignalingstatechange = ()=>{}
+        rtcpc.onnegotiationneeded = ()=>{}
+        rtcpc.ontrack = ()=>{}
+        this.state = {
+            rtcpc : rtcpc
         }
-        peerConnection.onicecandidate = this.handleICECandidateEvent
-        peerConnection.oniceconnectionstatechange = this.handleICEConnectionStateChangeEvent
-        peerConnection.onicegatheringstatechange = this.handleICEGatheringStateChangeEvent
-        peerConnection.onsignalingstatechange = this.handleSignalingStateChangeEvent
-        peerConnection.onnegotiationneeded = this.handleNegotiationNeededEvent
-        peerConnection.ontrack = this.handleTrackEvent
-
-        peerConnection.onopen = this.handleOpen
-        peerConnection.onerror = this.handleError
-        peerConnection.onmessage = this.handleMessage
     }
 
-    dial = (username, peerConnection) => {
-
+    dial = (targetID) => {
+        const {rtcpc} = this.state
+        const {RTCClient} = this.props
+        rtcpc.createOffer().then((offer) => {
+            rtcpc.setLocalDescription(offer)
+            navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            }).then((stream)=> stream.getTracks().forEach(track=>rtcpc.addTrack(track)))
+        }).catch((err) => {
+            console.log('create offer err:', err)
+        })
+        RTCClient.send({
+            source: this.props.userID,
+            target: targetID,
+            sd: rtcpc.localDescription
+        })
     }
 
     login = () => {
@@ -46,47 +46,10 @@ export default class CallPanel extends React.Component {
 
     refresh = () => {
 
-    }
-
-    handleMessage = (e) => {
-        let msg = JSON.parse(e.data)
-        console.log('message comming:', msg)
-    }
-
-    handleError = (e) => {
-        console.log('error happend:', e)
-    }
-
-    handleOpen = (e) => {
-        console.log('connection opened:', e)
-    }
-
-    handleICECandidateEvent = () => {
-
-    }
-
-    handleICEConnectionStateChangeEvent = () => {
-
-    }
-
-    handleICEGatheringStateChangeEvent = () => {
-
-    }
-
-    handleSignalingStateChangeEvent = () => {
-
-    }
-
-    handleNegotiationNeededEvent = () => {
-
-    }
-
-    handleTrackEvent = () => {
-
-    }
+    } 
 
     render() {
-        const { users } = this.state
+        const { users } = this.props
         return (
             <div>
                 <div className='login' style={{ display: 'flex' }}>
@@ -94,10 +57,10 @@ export default class CallPanel extends React.Component {
                     <button onClick={this.login}>登录</button>
                     <button onClick={this.refresh}>刷新</button>
                 </div>
-                <UserPanel users={users} clickHanlder={this.handleClick} />
+                <UserPanel users={users} clickHanlder={this.dial} />
                 <video id='caller' autoPlay controls muted width='50%'></video>
                 <video id='callee' autoPlay controls width='100%'></video>
-                <button onClick={this.handlePlay}>播放</button>
+                <button onClick={this.dial}>播放</button>
             </div >
         )
     }

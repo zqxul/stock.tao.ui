@@ -1,0 +1,28 @@
+syntax="proto3";
+
+import "google/protobuf/any.proto";
+
+option go_package=".;user";
+
+message LocalDescription { 
+    string source = 1;
+    string target = 2;
+    SessionDescription sd = 3;
+}
+
+message SessionDescription {
+    string type = 1;
+    string sdp = 2;
+}
+
+message RemoteDescription { 
+    int32 code = 1;
+    string msg = 2;
+    google.protobuf.Any data = 3;
+}
+
+service RTC {
+
+    rpc send(LocalDescription) return (RemoteDescription);
+
+}

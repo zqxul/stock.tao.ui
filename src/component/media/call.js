@@ -11,8 +11,14 @@ export default class CallPanel extends React.Component {
             }],
         })
         rtcpc.onicecandidate = (e) => {
+            const { RTCClient } = this.state
             const { rtcpc } = this.state
             rtcpc.addIceCandidate(e.candidate)
+            RTCClient.candidate({
+                localID: null,
+                remoteID: null,
+                candidate: e.candidate
+            })
         }
         rtcpc.oniceconnectionstatechange = () => { }
         rtcpc.onicegatheringstatechange = () => { }

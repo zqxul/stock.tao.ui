@@ -2,11 +2,11 @@ syntax="proto3";
 
 import "google/protobuf/any.proto";
 
-option go_package=".;user";
+option go_package=".;rtc";
 
 message LocalDescription { 
-    string source = 1;
-    string target = 2;
+    string localID = 1;
+    string remoteID = 2;
     SessionDescription sd = 3;
 }
 
@@ -15,14 +15,22 @@ message SessionDescription {
     string sdp = 2;
 }
 
+message IceCandidateDescription {
+    string localID = 1;
+    string remoteID = 2;
+    string candidate = 3;
+}
+
 message RemoteDescription { 
-    int32 code = 1;
-    string msg = 2;
-    google.protobuf.Any data = 3;
+    string localID = 1;
+    string remoteID = 2;
+    SessionDescription sd = 3;
 }
 
 service RTC {
 
-    rpc send(LocalDescription) return (RemoteDescription);
+    rpc candidate(stream IceCandidateDescription) return (stream IceCandidateDescription);
+
+    rpc exchange(stream LocalDescription) return (stream RemoteDescription);
 
 }

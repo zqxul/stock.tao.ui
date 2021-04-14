@@ -35,14 +35,14 @@ export default class RTCClient {
         this.hostname = hostname
     }
 
-    // login method
-    send = (ld, metadata) => {
+    // offer method
+    exchange = (ld, metadata) => {
         return this.client.thenableCall(
             this.hostname + '/rtc',
             ld,
             metadata || {},
             new gprc.MethodDescriptor(
-                '/rtc',
+                '/rtc/exchange',
                 'UNARY',
                 RTCProto.LocalDescription,
                 RTCProto.PbStockTao,
@@ -53,28 +53,6 @@ export default class RTCClient {
                         rd.sd = RTCProto.RemoteDescription.decode(rd.sd)
                     }
                     return rd
-                }
-            )
-        )
-    }
-
-    // register method
-    register = (request, metadata) => {
-        return this.client.thenableCall(
-            this.hostname + '/rtc',
-            request,
-            metadata || {},
-            new gprc.MethodDescriptor(
-                '/User/Register',
-                'UNARY',
-                RTCProto.PbLoginRequest,
-                RTCProto.PbStockTao,
-                message => RTCProto.PbRegisterRequest.encode(message).finish(),
-                buffer => {
-                    let response = RTCProto.PbStockTao.decode(buffer);
-                    if (response.data) {
-                        response.data = RTCProto.PbRegisterResponse.decode(response.data)
-                    }
                 }
             )
         )

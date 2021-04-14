@@ -6,37 +6,42 @@ export default class CallPanel extends React.Component {
     constructor(props) {
         super(props)
         let rtcpc = new RTCPeerConnection({
-            iceServers:[{
-                urls:['stock.tao']
+            iceServers: [{
+                urls: ['stock.tao']
             }],
         })
-        rtcpc.onicecandidate = (e) => {}
-        rtcpc.oniceconnectionstatechange = ()=>{}
-        rtcpc.onicegatheringstatechange = ()=>{}
-        rtcpc.onsignalingstatechange = ()=>{}
-        rtcpc.onnegotiationneeded = ()=>{}
-        rtcpc.ontrack = ()=>{}
+        rtcpc.onicecandidate = (e) => {
+            const { rtcpc } = this.state
+            rtcpc.addIceCandidate(e.candidate)
+        }
+        rtcpc.oniceconnectionstatechange = () => { }
+        rtcpc.onicegatheringstatechange = () => { }
+        rtcpc.onsignalingstatechange = () => { }
+        rtcpc.onnegotiationneeded = () => { }
+        rtcpc.ontrack = () => { }
         this.state = {
-            rtcpc : rtcpc
+            rtcpc: rtcpc
         }
     }
 
-    dial = (targetID) => {
-        const {rtcpc} = this.state
-        const {RTCClient} = this.props
+    dial = (remoteID) => {
+        const { rtcpc } = this.state
+        const { RTCClient } = this.props
         rtcpc.createOffer().then((offer) => {
             rtcpc.setLocalDescription(offer)
             navigator.mediaDevices.getUserMedia({
                 video: true,
                 audio: true
-            }).then((stream)=> stream.getTracks().forEach(track=>rtcpc.addTrack(track)))
+            }).then((stream) => stream.getTracks().forEach(track => rtcpc.addTrack(track)))
         }).catch((err) => {
             console.log('create offer err:', err)
         })
-        RTCClient.send({
+        RTCClient.exchange({
             source: this.props.userID,
-            target: targetID,
+            target: remoteID,
             sd: rtcpc.localDescription
+        }).then(rd => {
+            rtcpc.setRemoteDescription(rd.sd)
         })
     }
 
@@ -46,7 +51,7 @@ export default class CallPanel extends React.Component {
 
     refresh = () => {
 
-    } 
+    }
 
     render() {
         const { users } = this.props
@@ -76,12 +81,12 @@ export class UserPanel extends React.Component {
     }
 
     render() {
-        const { users, clickHanlder } = this.props
+        const { users, clickHandlder } = this.props
         return (
             <div className='user-list'>
                 <div>用户列表</div>
                 <div>
-                    {users.map(user => <UserItem key={user.username} user={user} clickHanlder={clickHanlder} />)}
+                    {users.map(user => <UserItem key={user.username} user={user} clickHandlder={clickHandlder} />)}
                 </div>
             </div>
         )

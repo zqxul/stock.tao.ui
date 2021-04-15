@@ -1,10 +1,8 @@
 syntax="proto3";
 
-import "google/protobuf/any.proto";
-
 option go_package=".;rtc";
 
-message LocalDescription { 
+message WebRTCDescription { 
     string localID = 1;
     string remoteID = 2;
     SessionDescription sd = 3;
@@ -20,15 +18,8 @@ message IceCandidateDescription {
     string candidate = 1;
 }
 
-message RemoteDescription { 
-    string localID = 1;
-    string remoteID = 2;
-    SessionDescription sd = 3;
-    IceCandidateDescription icd = 4;
-}
-
 service RTC {
 
-    rpc exchange(stream LocalDescription) return (stream RemoteDescription);
+    rpc exchange(stream WebRTCDescription) returns (stream WebRTCDescription);
 
 }

@@ -35,15 +35,15 @@ export default class RTCClient {
         this.hostname = hostname
     }
 
-    // offer method
-    exchange = (ld, metadata) => {
-        return this.client.thenableCall(
+    // exchange method
+    exchange = (ld, metadata, handler) => {
+        return this.client.serverStreaming(
             this.hostname + '/rtc',
             ld,
             metadata || {},
             new gprc.MethodDescriptor(
                 '/rtc/exchange',
-                'UNARY',
+                'STREAM',
                 RTCProto.LocalDescription,
                 RTCProto.RemoteDescription,
                 message => RTCProto.LocalDescription.encode(message).finish(),
@@ -55,6 +55,16 @@ export default class RTCClient {
                     return rd
                 }
             )
-        )
+        ).on('data', rd => {
+            if (rd.icd) {
+                const icd = new RTCIceCandidate(rd.icd)
+                rtcpc.addIceCandidate(icd)
+            }
+            if (rd.sd) {
+                const sd = new RTCSessionDescription(rd.sd)
+                rtcpc.setRemoteDescription(sd)
+            }
+            handler(rd)
+        })
     }
 }

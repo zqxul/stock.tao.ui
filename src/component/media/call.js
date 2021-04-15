@@ -1,10 +1,15 @@
 import React from 'react';
-import RTCClient from './rtc';
-
+import RTCClient, { loadRTCProto } from './rtc';
+const RTCProto = loadRTCProto()
 export default class CallPanel extends React.Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            rtcpc: rtcpc,
+            remoteID: null
+        }
+        const { localID } = this.props
         let rtcpc = new RTCPeerConnection({
             iceServers: [{
                 urls: ['stock.tao']
@@ -12,12 +17,13 @@ export default class CallPanel extends React.Component {
         })
         rtcpc.onicecandidate = e => {
             const { RTCClient } = this.state
-            RTCClient.exchange({
-                localID: null,
-                remoteID: null,
-                sd: null,
+            let ld = RTCProto.localDescription.create({
+                localID: localID,
+                remoteID: this.state.remoteID,
+                sd: rtcpc.localDescription,
                 icd: e.candidate
             })
+            RTCClient.exchange(ld)
         }
         rtcpc.oniceconnectionstatechange = e => {
             console.log('ICE RTCPeerConnection state change to ' + rtcpc.iceConnectionState)
@@ -44,28 +50,40 @@ export default class CallPanel extends React.Component {
             console.log('Negotiation needed')
 
             console.log('Creating offer')
-            const offer = rtcpc.createOffer()
+            rtcpc.createOffer().then(offer => {
+                console.log('Setting local description to the offer')
+                rtcpc.setLocalDescription(offer)
 
-            console.log('Setting local description to the offer')
-            rtcpc.setLocalDescription(offer)
-
-            console.log('Setting the offer to the remote peer')
-            RTCClient.exchange({
-                localID: null,
-                remoteID: null,
-                sdp: rtcpc.localDescription,
-                icd: null
-            }).catch(error => {
-                console.log('The following error occured while sending the offer to the remote peer')
+                console.log('Setting the offer to the remote peer')
+                let ld = RTCProto.localDescription.create({
+                    localID: localID,
+                    remoteID: this.state.remoteID,
+                    sdp: rtcpc.localDescription,
+                    icd: null
+                })
+                RTCClient.exchange(ld).catch(error => {
+                    console.log('The following error occured while sending the offer to the remote peer')
+                })
             })
         }
-        rtcpc.ontrack = () => { }
-        this.state = {
-            rtcpc: rtcpc
+        rtcpc.ontrack = e => {
+            console.log('Track event')
+            this.setState({
+                srcObject: e.streams[0],
+                status: 'CALLING'
+            })
+            rtcpc.addTrack(e.track)
+            let localDescription = RTCProto.localDescription.create({
+                localID: localID,
+                remoteID: this.state.remoteID,
+                sd: rtcpc.localDescription,
+                icd: null
+            })
+            RTCClient.exchange(localDescription)
         }
     }
 
-    dial = (remoteID) => {
+    offer = (remoteID) => {
         const { rtcpc } = this.state
         const { RTCClient } = this.props
         rtcpc.createOffer().then((offer) => {
@@ -74,20 +92,32 @@ export default class CallPanel extends React.Component {
                 video: true,
                 audio: true
             }).then((stream) => stream.getTracks().forEach(track => rtcpc.addTrack(track)))
+        }).then(() => {
+            let ld = RTCProto.localDescription.create({
+                source: this.props.userID,
+                target: remoteID,
+                sd: rtcpc.localDescription
+            })
+            RTCClient.exchange(ld)
         }).catch((err) => {
-            console.log('create offer err:', err)
+            console.log('offer err:', err)
         })
-        RTCClient.exchange({
-            source: this.props.userID,
-            target: remoteID,
-            sd: rtcpc.localDescription
-        }).then(rd => {
-            if (rd.icd) {
-                rtcpc.addIceCandidate(rd.icd)
-            }
-            if (rd.sd) {
-                rtcpc.setRemoteDescription(rd.sd)
-            }
+    }
+
+    answer = (remoteID) => {
+        const { rtcpc } = this.state
+        const { RTCClient } = this.props
+        rtcpc.createAnswer().then(answer => {
+            rtcpc.setLocalDescription(answer)
+        }).then(() => {
+            let ld = RTCProto.localDescription.create({
+                source: this.props.userID,
+                target: remoteID,
+                sd: rtcpc.localDescription
+            })
+            RTCClient.exchange(ld)
+        }).catch(error => {
+            console.log('answer error:', error)
         })
     }
 
@@ -108,10 +138,10 @@ export default class CallPanel extends React.Component {
                     <button onClick={this.login}>登录</button>
                     <button onClick={this.refresh}>刷新</button>
                 </div>
-                <UserPanel users={users} clickHanlder={this.dial} />
+                <UserPanel users={users} clickHanlder={this.offer} />
                 <video id='caller' autoPlay controls muted width='50%'></video>
                 <video id='callee' autoPlay controls width='100%'></video>
-                <button onClick={this.dial}>播放</button>
+                <button onClick={this.offer}>播放</button>
             </div >
         )
     }

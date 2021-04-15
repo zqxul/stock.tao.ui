@@ -10,20 +10,55 @@ export default class CallPanel extends React.Component {
                 urls: ['stock.tao']
             }],
         })
-        rtcpc.onicecandidate = (e) => {
+        rtcpc.onicecandidate = e => {
             const { RTCClient } = this.state
-            const { rtcpc } = this.state
-            rtcpc.addIceCandidate(e.candidate)
-            RTCClient.candidate({
+            RTCClient.exchange({
                 localID: null,
                 remoteID: null,
-                candidate: e.candidate
+                sd: null,
+                icd: e.candidate
             })
         }
-        rtcpc.oniceconnectionstatechange = () => { }
-        rtcpc.onicegatheringstatechange = () => { }
-        rtcpc.onsignalingstatechange = () => { }
-        rtcpc.onnegotiationneeded = () => { }
+        rtcpc.oniceconnectionstatechange = e => {
+            console.log('ICE RTCPeerConnection state change to ' + rtcpc.iceConnectionState)
+            switch (rtcpc.iceConnectionState) {
+                case 'closed':
+                case 'failed':
+                case 'disconnected':
+                    // TODO close commucation
+                    break;
+            }
+        }
+        rtcpc.onicegatheringstatechange = e => {
+            console.log('ICE gathering state changed to ' + rtcpc.iceGatheringState)
+        }
+        rtcpc.onsignalingstatechange = e => {
+            console.log('WebRTC signaling state changed to ' + rtcpc.signalingState)
+            switch (rtcpc.signalingState) {
+                case 'closed':
+                    // TODO close commucation
+                    break;
+            }
+        }
+        rtcpc.onnegotiationneeded = e => {
+            console.log('Negotiation needed')
+
+            console.log('Creating offer')
+            const offer = rtcpc.createOffer()
+
+            console.log('Setting local description to the offer')
+            rtcpc.setLocalDescription(offer)
+
+            console.log('Setting the offer to the remote peer')
+            RTCClient.exchange({
+                localID: null,
+                remoteID: null,
+                sdp: rtcpc.localDescription,
+                icd: null
+            }).catch(error => {
+                console.log('The following error occured while sending the offer to the remote peer')
+            })
+        }
         rtcpc.ontrack = () => { }
         this.state = {
             rtcpc: rtcpc
@@ -47,7 +82,12 @@ export default class CallPanel extends React.Component {
             target: remoteID,
             sd: rtcpc.localDescription
         }).then(rd => {
-            rtcpc.setRemoteDescription(rd.sd)
+            if (rd.icd) {
+                rtcpc.addIceCandidate(rd.icd)
+            }
+            if (rd.sd) {
+                rtcpc.setRemoteDescription(rd.sd)
+            }
         })
     }
 

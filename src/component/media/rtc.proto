@@ -8,6 +8,7 @@ message LocalDescription {
     string localID = 1;
     string remoteID = 2;
     SessionDescription sd = 3;
+    IceCandidateDescription icd = 4;
 }
 
 message SessionDescription {
@@ -16,20 +17,17 @@ message SessionDescription {
 }
 
 message IceCandidateDescription {
-    string localID = 1;
-    string remoteID = 2;
-    string candidate = 3;
+    string candidate = 1;
 }
 
 message RemoteDescription { 
     string localID = 1;
     string remoteID = 2;
     SessionDescription sd = 3;
+    IceCandidateDescription icd = 4;
 }
 
 service RTC {
-
-    rpc candidate(stream IceCandidateDescription) return (stream IceCandidateDescription);
 
     rpc exchange(stream LocalDescription) return (stream RemoteDescription);
 

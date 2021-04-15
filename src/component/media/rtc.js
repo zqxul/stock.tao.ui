@@ -45,7 +45,7 @@ export default class RTCClient {
                 '/rtc/exchange',
                 'UNARY',
                 RTCProto.LocalDescription,
-                RTCProto.PbStockTao,
+                RTCProto.RemoteDescription,
                 message => RTCProto.LocalDescription.encode(message).finish(),
                 buffer => {
                     let rd = RTCProto.RemoteDescription.decode(buffer)

@@ -3,7 +3,7 @@ import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
 import RTCClient, { loadRTCProto } from './rtc';
 const RTCProto = loadRTCProto()
-export default class NetWorkPanel extends React.Component {
+export default class NetWorkTab extends React.Component {
 
     constructor(props) {
         super(props)
@@ -131,24 +131,26 @@ export default class NetWorkPanel extends React.Component {
 
     }
 
+    refreshCurrentUser = userID => {
+        this.setState({
+            selectedUserID: userID
+        })
+    }
+
     render() {
-        const { users } = this.props
+        const { selectedUserID, user } = this.state
         return (
             <div>
-                <div className='login' style={{ display: 'flex' }}>
-                    <input id='username' type='text' placeholder='请输入用户名'></input>
-                    <button onClick={this.login}>登录</button>
-                    <button onClick={this.refresh}>刷新</button>
-                </div>
-                <UserPanel users={users} clickHanlder={this.offer} />
-                <video id='caller' autoPlay controls muted width='50%'></video>
-                <video id='callee' autoPlay controls width='100%'></video>
-                <button onClick={this.offer}>播放</button>
-            </div >
+                <AddrBookPanel selectedGroupId={user.groupId} selectedUserId={selectedUserID} selectHandler={this.refreshCurrentUser} />
+                <ChatPanel selectedUserId={selectedUserID} />
+            </div>
         )
     }
+
+
 }
 
+// 通讯录面板
 export class AddrBookPanel extends React.Component {
 
     constructor(props) {
@@ -157,18 +159,19 @@ export class AddrBookPanel extends React.Component {
     }
 
     render() {
-        const { AddrGroups, ClickHandlder } = this.props
+        const { AddrGroups, selectedUserId, selectedGroupId } = this.props
         return (
             <div className='user-list'>
                 <div>用户列表</div>
                 <div>
-                    {AddrGroups.map(group => <AddrGroupItem key={group.groupId} group={group} clickHandlder={ClickHandlder} />)}
+                    {AddrGroups.map(group => <AddrGroupItem key={group.groupId} group={group} selectHandler={this.props.selectHandler} />)}
                 </div>
             </div>
         )
     }
 }
 
+// 通讯录-人脉分组
 class AddrGroupItem extends React.Component {
     constructor(props) {
         super(props)
@@ -193,7 +196,7 @@ class AddrGroupItem extends React.Component {
 
     render() {
         const { group, items } = this.props
-        let addrItemList = items.length > 0 ? items.map(item => <UserItem user={item} />) : null
+        let addrItemList = items.length > 0 ? items.map(item => <UserItem user={item} selectHandler={this.props.selectHandler} />) : null
 
         return <div id={group.groupId}>
             <header className='flex'>
@@ -210,16 +213,29 @@ class AddrGroupItem extends React.Component {
     }
 }
 
+// 通讯录-人脉分组-成员
 class UserItem extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            style: {
+
+            }
+        }
     }
 
     handleCall = (username) => {
         const { user, clickHanlder } = this.props
         clickHanlder(user.username)
+    }
+
+    handleSelect = userID => {
+        const { selectHandler } = this.props
+        this.setState({
+            style: {}
+        })
+        selectHandler(userID)
     }
 
     render() {
@@ -228,7 +244,7 @@ class UserItem extends React.Component {
             backGroundColor: user.online ? 'green' : 'gray'
         }
         return (
-            <div className='user-item' style='display:inline'>
+            <div className='user-item' style='display:inline' onSelect={this.handleSelect}>
                 <div className='avatar'><img className='user-avartar' src={user.avartar} /></div>
                 <div className='nickname' style={style}>{user.nickname}</div>
                 <div className='online'><Icon icon={faDotCircle} style={onlineStyle} /></div>
@@ -236,4 +252,89 @@ class UserItem extends React.Component {
             </div >
         )
     }
+}
+
+// 聊天面板
+class ChatPanel extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    handleScroll = () => {
+        // TODO 
+        let records = []
+        this.setState({
+            records: records
+        })
+
+    }
+
+    render() {
+        const { selectedUserId } = this.props
+        return <div>
+            <HistoryPanel userID={selectedUserId} />
+            <InputPanel userID={selectedUserId} />
+        </div>
+    }
+}
+
+// 聊天面板-历史
+class HistoryPanel extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            records: []
+        }
+    }
+
+    render() {
+        const { userID } = this.props;
+        // TODO get chat records by userID
+        let records = []
+        return <div>
+            {records.map(record => <ChatRecord key={record.recordId} record={record} />)}
+        </div>
+    }
+
+}
+
+// 聊天面板-输入框
+class InputPanel extends React.Component {
+
+}
+
+class ChatRecord extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        const { record } = this.props
+        if (record.type === undefined) return null
+
+        let content = null;
+        switch (record.type) {
+            case 'text':
+                content = <div>{record.text}</div>
+                break
+            case 'audio':
+                content = <audio src={record.url} />
+                break
+            case 'image':
+                content = <img src={record.url} />
+                break;
+            case 'video':
+                content = <img src={record.url} />
+                break
+            default:
+                content = null
+        }
+        return <div className='record-content'>{content}</div>
+    }
+
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import './landing.css'
 import { LoginForm, RegisterForm } from './form'
-import UserClient from '../module/user/user'
+import { UserClient } from '../module/client'
 
 export default class LandingPanel extends React.Component {
 
@@ -26,7 +26,6 @@ export default class LandingPanel extends React.Component {
 
     render() {
         const { tab } = this.state
-        const userClient = new UserClient('http://localhost:9080')
         return (
             <div className='landing-panel'>
                 <div className='landing-header'>
@@ -35,7 +34,7 @@ export default class LandingPanel extends React.Component {
                     <LandingTab tabName='register' landingHandler={this.handleRegister} />
                 </div>
                 <div className='landing-body'>
-                    {tab === 'login' ? <LoginForm client={userClient} /> : <RegisterForm client={userClient} />}
+                    {tab === 'login' ? <LoginForm /> : <RegisterForm />}
                 </div>
                 {/* <div className='landing-footer'>
                     Welcome to Mars!

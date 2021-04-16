@@ -1,9 +1,9 @@
 import React from 'react'
 import './form.css'
-import { loadUserProto } from '../module/user/user'
 import { connect } from 'react-redux'
-import { save, refresh, clear } from "../module/user/slice";
-const UserProto = loadUserProto()
+import { save, refresh, clear } from '../module/user/slice'
+import { UserClient } from '../module/client'
+import { UserProto } from '../module/proto'
 
 const mapDispatcher = {}
 
@@ -11,9 +11,7 @@ export class LoginForm extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     handleForget = (e) => {
@@ -23,14 +21,13 @@ export class LoginForm extends React.Component {
 
     handleLogin = (e) => {
         const { username, password, rememberMe, verifyCode } = this.state
-        const { client } = this.props
         let loginRequest = UserProto.PbLoginRequest.create({
             username: username,
             password: password,
             rememberMe: rememberMe,
             verifyCode: verifyCode
         })
-        client.login(loginRequest, {}).then((res) => {
+        UserClient.login(loginRequest, {}).then((res) => {
             if (res.code && res.code === 200) {
                 save(res.data)
             } else {
@@ -131,14 +128,13 @@ export class RegisterForm extends React.Component {
 
     handleRegister = (e) => {
         const { username, email, password, nickname } = this.state
-        const { client } = this.props
         let registerRequest = UserProto.PbRegisterRequest.create({
             username: username,
             password: password,
             email: email,
             nickname: nickname
         })
-        client.register(registerRequest, {}).then((res) => {
+        UserClient.register(registerRequest, {}).then((res) => {
             if (res.code && res.code === 200) {
                 save(res.data)
                 alert('register success')

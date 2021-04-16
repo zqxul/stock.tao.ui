@@ -25,7 +25,7 @@ export function loadUserProto() {
     return UserProto
 }
 
-export default class UserClient {
+class Client {
 
     // load user.proto
     UserProto = loadUserProto()
@@ -84,4 +84,4 @@ export default class UserClient {
 }
 
 
-
+export const UserClient = new Client('http://localhost:9080')

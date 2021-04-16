@@ -1,7 +1,9 @@
 import React from 'react';
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
 import RTCClient, { loadRTCProto } from './rtc';
 const RTCProto = loadRTCProto()
-export default class CallPanel extends React.Component {
+export default class NetWorkPanel extends React.Component {
 
     constructor(props) {
         super(props)
@@ -147,25 +149,64 @@ export default class CallPanel extends React.Component {
     }
 }
 
-export class UserPanel extends React.Component {
+export class AddrBookPanel extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     render() {
-        const { users, clickHandlder } = this.props
+        const { AddrGroups, ClickHandlder } = this.props
         return (
             <div className='user-list'>
                 <div>用户列表</div>
                 <div>
-                    {users.map(user => <UserItem key={user.username} user={user} clickHandlder={clickHandlder} />)}
+                    {AddrGroups.map(group => <AddrGroupItem key={group.groupId} group={group} clickHandlder={ClickHandlder} />)}
                 </div>
             </div>
         )
+    }
+}
+
+class AddrGroupItem extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    handleRefresh = groupId => {
+        fetch({
+            method: 'GET',
+            url: 'http://localhost:8080/addressbook/group/refresh'
+        }).then(response => {
+            let items = response.data
+        })
+    }
+
+    handleToggle = groupId => {
+        this.handleRefresh(groupId)
+        this.setState({
+            display: true
+        })
+    }
+
+    render() {
+        const { group, items } = this.props
+        let addrItemList = items.length > 0 ? items.map(item => <UserItem user={item} />) : null
+
+        return <div id={group.groupId}>
+            <header className='flex'>
+                <div>{group.groupName}</div>
+                <div className='flex group-menu'>
+                    <button onClick={this.handleRefresh(group.groupId)}>refresh</button>
+                    <button onClick={this.handleToggle(group.groupId)}>collapse</button>
+                </div>
+            </header>
+            <body>
+                {addrItemList}
+            </body>
+        </div>
     }
 }
 
@@ -173,9 +214,7 @@ class UserItem extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
+        this.state = {}
     }
 
     handleCall = (username) => {
@@ -185,14 +224,16 @@ class UserItem extends React.Component {
 
     render() {
         const { user } = this.props
-        const style = {
-            display: 'inline'
+        let onlineStyle = user.online === undefined ? null : {
+            backGroundColor: user.online ? 'green' : 'gray'
         }
         return (
-            <div className='user-item'>
-                <div className='username' style={style}>{user.username}</div>
-                <button onClick={this.handleCall} style={style}>呼叫</button>
-            </div>
+            <div className='user-item' style='display:inline'>
+                <div className='avatar'><img className='user-avartar' src={user.avartar} /></div>
+                <div className='nickname' style={style}>{user.nickname}</div>
+                <div className='online'><Icon icon={faDotCircle} style={onlineStyle} /></div>
+                <button onClick={this.handleCall} style={style}>Call</button>
+            </div >
         )
     }
 }

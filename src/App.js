@@ -5,8 +5,8 @@ import Nav from './component/nav/nav';
 import SearchPanel from './component/search/search'
 import { MenuList } from './config'
 import LivingVideo from './component/media/living'
-import Call from './component/media/call';
-import CallPanel from './component/media/call';
+import Call from './module/network';
+import CallPanel from './module/network';
 import LandingPanel from './component/panel'
 import { connect } from "react-redux";
 

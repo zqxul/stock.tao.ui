@@ -1,7 +1,7 @@
 import React from 'react'
 import './landing.css'
 import { LoginForm, RegisterForm } from './form'
-import { UserClient } from '../module/client'
+import { UserClient } from '../module/client/client'
 
 export default class LandingPanel extends React.Component {
 

@@ -1,16 +1,13 @@
-import React from 'react';
-import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome";
+import React from 'react'
+import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome"
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
-import RTCClient, { loadRTCProto } from './rtc';
-const RTCProto = loadRTCProto()
+import { RTCClient } from './client/client'
+import { RTCProto } from "./client/proto/proto";
 export default class NetWorkTab extends React.Component {
 
     constructor(props) {
         super(props)
-        this.state = {
-            rtcpc: rtcpc,
-            remoteID: null
-        }
+
         const { localID } = this.props
         let rtcpc = new RTCPeerConnection({
             iceServers: [{
@@ -83,6 +80,10 @@ export default class NetWorkTab extends React.Component {
             })
             RTCClient.exchange(localDescription)
         }
+        this.state = {
+            rtcpc: rtcpc,
+            remoteID: null
+        }
     }
 
     offer = (remoteID) => {
@@ -150,7 +151,7 @@ export default class NetWorkTab extends React.Component {
 
 }
 
-// 通讯录面板
+// 通讯录
 export class AddrBookPanel extends React.Component {
 
     constructor(props) {
@@ -246,15 +247,15 @@ class UserItem extends React.Component {
         return (
             <div className='user-item' style='display:inline' onSelect={this.handleSelect}>
                 <div className='avatar'><img className='user-avartar' src={user.avartar} /></div>
-                <div className='nickname' style={style}>{user.nickname}</div>
+                <div className='nickname' >{user.nickname}</div>
                 <div className='online'><Icon icon={faDotCircle} style={onlineStyle} /></div>
-                <button onClick={this.handleCall} style={style}>Call</button>
-            </div >
+                <button onClick={this.handleCall} >Call</button>
+            </div>
         )
     }
 }
 
-// 聊天面板
+// 聊天
 class ChatPanel extends React.Component {
 
     constructor(props) {
@@ -280,7 +281,7 @@ class ChatPanel extends React.Component {
     }
 }
 
-// 聊天面板-历史
+// 聊天-历史
 class HistoryPanel extends React.Component {
 
     constructor(props) {
@@ -301,11 +302,12 @@ class HistoryPanel extends React.Component {
 
 }
 
-// 聊天面板-输入框
+// 聊天-输入框
 class InputPanel extends React.Component {
 
 }
 
+// 聊天-历史-记录
 class ChatRecord extends React.Component {
 
     constructor(props) {

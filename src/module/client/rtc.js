@@ -1,6 +1,5 @@
 import { load, Method } from 'protobufjs'
 import * as gprc from 'grpc-web'
-// @ts-ignore
 import proto from './rtc.proto'
 
 const RTCProto = {
@@ -23,10 +22,7 @@ export function loadRTCProto() {
     return RTCProto
 }
 
-export default class RTCClient {
-
-    // load rtc.proto
-    RTCProto = loadRTCProto()
+class Client {
 
     constructor(hostname, credentials, options) {
         if (!options) options = {};
@@ -38,11 +34,11 @@ export default class RTCClient {
     // exchange method
     exchange = (ld, metadata, handler) => {
         return this.client.serverStreaming(
-            this.hostname + '/rtc',
+            this.hostname + '/RTC/Exchange',
             ld,
             metadata || {},
             new gprc.MethodDescriptor(
-                '/rtc/exchange',
+                '/RTC/Exchange',
                 'STREAM',
                 RTCProto.LocalDescription,
                 RTCProto.RemoteDescription,
@@ -68,3 +64,5 @@ export default class RTCClient {
         })
     }
 }
+
+export const RTCClient = new Client('http://localhost:9080')

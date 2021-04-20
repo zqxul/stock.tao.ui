@@ -1,6 +1,6 @@
 import { load, Method } from 'protobufjs'
 import * as gprc from 'grpc-web'
-import proto from './rtc.proto'
+import proto from './proto/rtc.proto'
 
 const RTCProto = {
     load: false
@@ -10,9 +10,8 @@ export function loadRTCProto() {
     if (!RTCProto.load) {
         console.log('start loading rtc.proto')
         load(proto).then(root => {
-            RTCProto.LocalDescription = root.lookupType('LocalDescription')
+            RTCProto.WebRTCDescription = root.lookupType('WebRTCDescription')
             RTCProto.SessionDescription = root.lookupType('SessionDescription')
-            RTCProto.RemoteDescription = root.lookupType('RemoteDescription')
             RTCProto.load = true
             console.log('load rtc.proto success')
         }).catch(err => {
@@ -40,13 +39,13 @@ class Client {
             new gprc.MethodDescriptor(
                 '/RTC/Exchange',
                 'STREAM',
-                RTCProto.LocalDescription,
-                RTCProto.RemoteDescription,
-                message => RTCProto.LocalDescription.encode(message).finish(),
+                RTCProto.WebRTCDescription,
+                RTCProto.WebRTCDescription,
+                message => RTCProto.WebRTCDescription.encode(message).finish(),
                 buffer => {
-                    let rd = RTCProto.RemoteDescription.decode(buffer)
+                    let rd = RTCProto.WebRTCDescription.decode(buffer)
                     if (rd) {
-                        rd.sd = RTCProto.RemoteDescription.decode(rd.sd)
+                        rd.sd = RTCProto.WebRTCDescription.decode(rd.sd)
                     }
                     return rd
                 }

@@ -1,0 +1,44 @@
+syntax="proto3";
+
+import "google/protobuf/any.proto";
+
+option go_package=".;group";
+
+message PbStockTao {
+    int32 code = 1;
+    string msg = 2;
+    google.protobuf.Any data = 3;
+}
+
+message PbGroupInfo{
+    int64 groupID =1;
+    string groupName = 2;
+}
+
+message PbGroupMemberRequest{
+    int64 groupID=1;
+}
+
+message PbGroupMemberResponse{
+    int64 groupID=1;
+    repeated PbUserInfo userInfos=2;
+}
+
+message PbGroupRequest{}
+
+message PbUserInfo{
+    int64 userID = 1;
+    string username = 2;
+    string nickname = 3;
+    string avatar = 4;
+    bool online = 5;
+}
+
+
+service PbGroup {
+
+    rpc List(PbGroupRequest) returns (PbStockTao);
+
+    rpc ListMembers (PbGroupMemberRequest) returns (PbStockTao);
+
+}

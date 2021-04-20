@@ -1,7 +1,6 @@
 import { load, Method } from 'protobufjs'
 import * as gprc from 'grpc-web'
-// @ts-ignore
-import proto from './user.proto'
+import proto from './proto/user.proto'
 
 const UserProto = {
     load: false

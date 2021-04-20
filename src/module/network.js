@@ -1,8 +1,9 @@
 import React from 'react'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome"
 import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
-import { RTCClient } from './client/client'
-import { RTCProto } from "./client/proto/proto";
+import { RTCClient, UserClient, GroupClient } from './client/client'
+import { RTCProto, UserProto, GroupProto } from "./client/proto/proto"
+import './network.css'
 export default class NetWorkTab extends React.Component {
 
     constructor(props) {
@@ -10,9 +11,9 @@ export default class NetWorkTab extends React.Component {
 
         const { localID } = this.props
         let rtcpc = new RTCPeerConnection({
-            iceServers: [{
-                urls: ['stock.tao']
-            }],
+            // iceServers: [{
+            //     urls: ['stock.tao']
+            // }],
         })
         rtcpc.onicecandidate = e => {
             const { RTCClient } = this.state
@@ -82,7 +83,10 @@ export default class NetWorkTab extends React.Component {
         }
         this.state = {
             rtcpc: rtcpc,
-            remoteID: null
+            remoteID: null,
+            user: {
+                groupId: 1
+            }
         }
     }
 
@@ -140,9 +144,19 @@ export default class NetWorkTab extends React.Component {
 
     render() {
         const { selectedUserID, user } = this.state
+        let addrGroups = [
+            {
+                groupId: 1,
+                groupName: 'group1'
+            },
+            {
+                groupId: 2,
+                groupName: 'group2'
+            }
+        ]
         return (
             <div>
-                <AddrBookPanel selectedGroupId={user.groupId} selectedUserId={selectedUserID} selectHandler={this.refreshCurrentUser} />
+                <AddrBookPanel addrGroups={addrGroups} selectedGroupId={user.groupId} selectedUserId={selectedUserID} selectHandler={this.refreshCurrentUser} />
                 <ChatPanel selectedUserId={selectedUserID} />
             </div>
         )
@@ -160,12 +174,12 @@ export class AddrBookPanel extends React.Component {
     }
 
     render() {
-        const { AddrGroups, selectedUserId, selectedGroupId } = this.props
+        const { addrGroups, selectedUserId, selectedGroupId } = this.props
         return (
             <div className='user-list'>
                 <div>用户列表</div>
                 <div>
-                    {AddrGroups.map(group => <AddrGroupItem key={group.groupId} group={group} selectHandler={this.props.selectHandler} />)}
+                    {addrGroups.map(group => <AddrGroupItem key={group.groupId} selectedUserID={selectedUserId} selectedGroupId={selectedGroupId} group={group} selectHandler={this.props.selectHandler} />)}
                 </div>
             </div>
         )
@@ -176,40 +190,57 @@ export class AddrBookPanel extends React.Component {
 class AddrGroupItem extends React.Component {
     constructor(props) {
         super(props)
-        this.state = {}
+        this.state = {
+            items: []
+        }
+        this.handleRefresh = this.handleRefresh.bind(this)
+        this.handleToggle = this.handleToggle.bind(this)
     }
 
-    handleRefresh = groupId => {
-        fetch({
-            method: 'GET',
-            url: 'http://localhost:8080/addressbook/group/refresh'
-        }).then(response => {
-            let items = response.data
+    async reloadMembers() {
+        GroupClient.List({}, {}).then((res) => {
+            if (res.code && res.code === 200) {
+                this.setState({
+                    items: res.data ? res.data : []
+                })
+            } else {
+                alert(res.msg)
+            }
+        }).catch((err) => {
+            if (err) {
+                console.log('login error:', err)
+            }
         })
     }
 
-    handleToggle = groupId => {
-        this.handleRefresh(groupId)
-        this.setState({
-            display: true
-        })
+    handleRefresh = (e, groupId) => {
+        this.reloadMembers(groupId)
+        e.preventDefault()
+    }
+
+    handleToggle = (e, groupId) => {
+        this.handleRefresh(e, groupId)
+        // this.setState({
+        //     display: true
+        // })
     }
 
     render() {
-        const { group, items } = this.props
+        const { group } = this.props
+        const { items } = this.state
         let addrItemList = items.length > 0 ? items.map(item => <UserItem user={item} selectHandler={this.props.selectHandler} />) : null
 
         return <div id={group.groupId}>
             <header className='flex'>
                 <div>{group.groupName}</div>
                 <div className='flex group-menu'>
-                    <button onClick={this.handleRefresh(group.groupId)}>refresh</button>
-                    <button onClick={this.handleToggle(group.groupId)}>collapse</button>
+                    <button onClick={this.handleRefresh.bind(group.groupId)}>refresh</button>
+                    <button onClick={this.handleToggle.bind(group.groupId)}>collapse</button>
                 </div>
             </header>
-            <body>
+            <main>
                 {addrItemList}
-            </body>
+            </main>
         </div>
     }
 }
@@ -304,6 +335,14 @@ class HistoryPanel extends React.Component {
 
 // 聊天-输入框
 class InputPanel extends React.Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+    render() {
+        return <div></div>
+    }
 
 }
 

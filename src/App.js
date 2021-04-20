@@ -5,8 +5,7 @@ import Nav from './component/nav/nav';
 import SearchPanel from './component/search/search'
 import { MenuList } from './config'
 import LivingVideo from './component/media/living'
-import Call from './module/network';
-import CallPanel from './module/network';
+import NetWorkTab from './module/network';
 import LandingPanel from './component/panel'
 import { connect } from "react-redux";
 
@@ -26,12 +25,12 @@ export class App extends React.Component {
 
   render() {
     const { info } = this.props
-    return info === undefined || info === null ?
+    return info ?
       <div className='landing'><LandingPanel /></div> :
       <>
         <Nav menus={MenuList} size='lg' />
         <main>
-          <header>
+          {/* <header>
             header
           </header>
           <SearchPanel />
@@ -41,7 +40,8 @@ export class App extends React.Component {
           <div className='quotes'>
             <CallPanel />
           </div>
-          <div className='comment'>comment</div>
+          <div className='comment'>comment</div> */}
+          <NetWorkTab localID={1} />
         </main>
       </>
   }

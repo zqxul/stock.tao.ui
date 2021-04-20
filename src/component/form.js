@@ -3,7 +3,7 @@ import './form.css'
 import { connect } from 'react-redux'
 import { save, refresh, clear } from '../module/slice/user'
 import { UserClient } from '../module/client/client'
-import { UserProto } from '../module/proto'
+import { UserProto } from '../module/client/proto/proto'
 
 const mapDispatcher = {}
 

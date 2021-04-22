@@ -28,9 +28,10 @@ export class App extends React.Component {
     return info ?
       <div className='landing'><LandingPanel /></div> :
       <>
-        <Nav menus={MenuList} size='lg' />
+        <NetWorkTab localID={1} />
+        {/* <Nav menus={MenuList} size='lg' />
         <main>
-          {/* <header>
+          <header>
             header
           </header>
           <SearchPanel />
@@ -40,9 +41,8 @@ export class App extends React.Component {
           <div className='quotes'>
             <CallPanel />
           </div>
-          <div className='comment'>comment</div> */}
-          <NetWorkTab localID={1} />
-        </main>
+          <div className='comment'>comment</div>
+        </main> */}
       </>
   }
 }

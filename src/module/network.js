@@ -1,9 +1,10 @@
 import React from 'react'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome"
-import { faDotCircle } from '@fortawesome/free-solid-svg-icons'
+import { faDotCircle, faFile, faFileExcel, faImage } from '@fortawesome/free-solid-svg-icons'
 import { RTCClient, UserClient, GroupClient } from './client/client'
 import { RTCProto, UserProto, GroupProto } from "./client/proto/proto"
 import './network.css'
+import EmojiPanel from './emoji'
 export default class NetWorkTab extends React.Component {
 
     constructor(props) {
@@ -155,8 +156,9 @@ export default class NetWorkTab extends React.Component {
             }
         ]
         return (
-            <div>
+            <div className='network tab flex'>
                 <AddrBookPanel addrGroups={addrGroups} selectedGroupId={user.groupId} selectedUserId={selectedUserID} selectHandler={this.refreshCurrentUser} />
+                <div className='divider' />
                 <ChatPanel selectedUserId={selectedUserID} />
             </div>
         )
@@ -176,8 +178,8 @@ export class AddrBookPanel extends React.Component {
     render() {
         const { addrGroups, selectedUserId, selectedGroupId } = this.props
         return (
-            <div className='user-list'>
-                <div>用户列表</div>
+            <div className='addrbook panel'>
+                <div>Contact</div>
                 <div>
                     {addrGroups.map(group => <AddrGroupItem key={group.groupId} selectedUserID={selectedUserId} selectedGroupId={selectedGroupId} group={group} selectHandler={this.props.selectHandler} />)}
                 </div>
@@ -276,8 +278,8 @@ class UserItem extends React.Component {
             backGroundColor: user.online ? 'green' : 'gray'
         }
         return (
-            <div className='user-item' style='display:inline' onSelect={this.handleSelect}>
-                <div className='avatar'><img className='user-avartar' src={user.avartar} /></div>
+            <div className='user item flex' onSelect={this.handleSelect}>
+                <div className='avatar item'><img src={user.avartar} /></div>
                 <div className='nickname' >{user.nickname}</div>
                 <div className='online'><Icon icon={faDotCircle} style={onlineStyle} /></div>
                 <button onClick={this.handleCall} >Call</button>
@@ -305,9 +307,9 @@ class ChatPanel extends React.Component {
 
     render() {
         const { selectedUserId } = this.props
-        return <div>
+        return <div className='chat panel flex flex-column'>
             <HistoryPanel userID={selectedUserId} />
-            <InputPanel userID={selectedUserId} />
+            <InputBoxPanel userID={selectedUserId} />
         </div>
     }
 }
@@ -325,23 +327,57 @@ class HistoryPanel extends React.Component {
     render() {
         const { userID } = this.props;
         // TODO get chat records by userID
-        let records = []
-        return <div>
-            {records.map(record => <ChatRecord key={record.recordId} record={record} />)}
+        let records = [
+            {
+                recordId: 1,
+                type: 'text',
+                text: 'Good morning my neigbor.',
+                recordTime: '2021-02-03 12:01'
+            },
+            {
+                recordId: 2,
+                type: 'text',
+                text: 'Fuck you!',
+                recordTime: '2021-02-03 12:02'
+            },
+            {
+                recordId: 3,
+                type: 'text',
+                text: 'Fuck you too!',
+                recordTime: '2021-02-03 12:03'
+            }
+        ]
+        return <div className='history panel flex flex-column flex-4'>
+            <div className='history-header'>History</div>
+            <div className='history-content'>
+                {records.map(record => <ChatRecord key={record.recordId} record={record} />)}
+            </div>
         </div>
     }
 
 }
 
 // 聊天-输入框
-class InputPanel extends React.Component {
+class InputBoxPanel extends React.Component {
 
     constructor(props) {
         super(props)
     }
 
     render() {
-        return <div></div>
+        return <div className='inputbox panel flex-1'>
+            <div className='inputbox-content'>
+                <textarea className='inputbox-textarea w-100' placeholder='Please input here' />
+                <div className='inputbox-footer flex'>
+                    <div className='inputbox-menu flex'>
+                        <Icon icon={faImage} />
+                        <Icon icon={faFile} />
+                        <EmojiPanel />
+                    </div>
+                    <button className='btn-send'>Send</button>
+                </div>
+            </div>
+        </div>
     }
 
 }
@@ -364,18 +400,24 @@ class ChatRecord extends React.Component {
                 content = <div>{record.text}</div>
                 break
             case 'audio':
-                content = <audio src={record.url} />
+                content = <Audio src={record.url} />
                 break
             case 'image':
-                content = <img src={record.url} />
-                break;
+                content = <Image src={record.url} />
+                break
+            case 'file':
+                content = <File name={record.url} />
+                break
             case 'video':
-                content = <img src={record.url} />
+                content = <Image src={record.url} />
                 break
             default:
                 content = null
         }
-        return <div className='record-content'>{content}</div>
+        return <div className='chatrecord item'>
+            <div>{content}</div>
+            <div className='record-time'>{record.recordTime}</div>
+        </div>
     }
 
 }

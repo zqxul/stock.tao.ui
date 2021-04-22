@@ -1,3 +1,36 @@
-.flex {
-    display: flex;
+@import url('../base.css');
+@import url('../flex.css');
+.network {
+    padding: 10px 5px;
+}
+
+.network>.panel {
+    padding: 2px;
+}
+
+.network .addrbook {
+    flex: 33;
+}
+
+.network .chat {
+    flex: 99;
+}
+
+.network .divider {
+    flex: 1;
+    margin: 3px;
+    border-left: 3px solid saddlebrown;
+}
+
+.inputbox-footer {
+    justify-content: space-between;
+}
+
+.btn-send {
+    height: 45px;
+    padding: 8px;
+}
+
+.inputbox-menu {
+    justify-content: space-around;
 }

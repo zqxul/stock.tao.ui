@@ -1,8 +1,9 @@
 import React from 'react'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome"
-import { faFileAudio, faFileVideo, faSmile } from '@fortawesome/free-solid-svg-icons'
+import { faAudioDescription, faCamera, faFileAudio, faFileVideo, faMicrophone, faPhoneAlt, faPhoneVolume, faPhotoVideo, faSmile, faVideo, faVoicemail, faVolumeUp } from '@fortawesome/free-solid-svg-icons'
 import 'emoji-mart/css/emoji-mart.css'
 import { Picker } from 'emoji-mart'
+import Dropzone from 'react-dropzone'
 import { faDotCircle, faFile, faFileExcel, faImage } from '@fortawesome/free-solid-svg-icons'
 import { RTCClient, UserClient, GroupClient } from './client/client'
 import { RTCProto, UserProto, GroupProto } from "./client/proto/proto"
@@ -386,20 +387,26 @@ class InputBoxPanel extends React.Component {
         const { toggle, type } = this.state
         if (toggle) {
             switch (type) {
+                case 'FILE':
+                    panel = <FilePicker multiple={true} />
+                    break
                 case 'IMAGE':
                     panel = <div>img selector</div>
                     break
-                case 'FILE':
-                    panel = <div>file selector</div>
+                case 'VOICE':
+                    panel = <div>audio selector</div>
                     break
-                case 'EMOJI':
-                    panel = <div><Picker className='float-left' title='Pick your emoji…' emoji='point_up' onSelect={this.handleSelect} /></div>
+                case 'CAMERA':
+                    panel = <div>audio selector</div>
                     break
-                case 'AUDIO':
+                case 'MICROPHONE':
                     panel = <div>audio selector</div>
                     break
                 case 'VIDEO':
                     panel = <div>video selector</div>
+                    break
+                case 'EMOJI':
+                    panel = <div><Picker className='float-left' title='Pick your emoji…' emoji='point_up' onSelect={this.handleSelect} /></div>
                     break
                 default:
                     null
@@ -410,10 +417,12 @@ class InputBoxPanel extends React.Component {
                 <textarea className='inputbox-textarea w-100' placeholder='Please input here' />
                 <div className='inputbox-footer flex'>
                     <div className='inputbox-menu flex flex-row'>
-                        <InputBoxMenu panel='IMAGE' icon={faImage} clickHanlder={this.handleClick} />
                         <InputBoxMenu panel='FILE' icon={faFile} clickHanlder={this.handleClick} />
-                        <InputBoxMenu panel='AUDIO' icon={faFileAudio} clickHanlder={this.handleClick} />
-                        <InputBoxMenu panel='VIDEO' icon={faFileVideo} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='IMAGE' icon={faPhotoVideo} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='VOICE' icon={faVoicemail} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='CAMERA' icon={faCamera} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='MICROPHONE' icon={faMicrophone} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='VIDEO' icon={faVideo} clickHanlder={this.handleClick} />
                         <InputBoxMenu panel='EMOJI' icon={faSmile} clickHanlder={this.handleClick} />
                     </div>
                     <div className='inputbox-btn p-3'>
@@ -448,6 +457,76 @@ class InputBoxMenu extends React.Component {
     }
 }
 
+class FilePicker extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+        }
+    }
+
+    handleChange = e => {
+        console.log(e.target.files)
+        // TODO send file/files
+    }
+
+    handleInput = e => {
+        let v = e.target.value
+        console.log('current value is:' + v)
+    }
+
+    render() {
+        const { multiple } = this.props
+        return <div>
+            <form encType='multipart/form-data'>
+                <label htmlFor="file">Choose file to upload</label>
+                <input type='file' id='file' name='file' accept='image/png, image/jpeg, *.pdf, *.mp3, *.mp4' multiple capture='environment' onChange={this.handleChange} onInput={this.handleInput} />
+            </form>
+        </div>
+    }
+}
+
+class AudioPicker extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    handleChange = e => {
+        console.log(e.target.files)
+        // TODO send file/files
+    }
+
+    handleInput = e => {
+        let v = e.target.value
+        console.log('current value is:' + v)
+    }
+
+    render() {
+        return <div>
+            <form encType='multipart/form-data'>
+                <label htmlFor="file">Choose file to upload</label>
+                <input type='file' id='audio' name='audio' accept='audio/mp3, audio/wav' capture='environment' onChange={this.handleChange} onInput={this.handleInput} />
+            </form>
+        </div>
+    }
+}
+
+class VideoPicker extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        return <div>
+            <form encType='multipart/form-data'>
+                <label htmlFor="file">Choose file to upload</label>
+                <input type='file' id='video' name='video' accept='video/mp4' capture='environment' />
+            </form>
+        </div>
+    }
+}
+
 // 聊天-历史-记录
 class ChatRecord extends React.Component {
 
@@ -476,6 +555,9 @@ class ChatRecord extends React.Component {
                 break
             case 'video':
                 content = <Image src={record.url} />
+                break
+            case 'emoji':
+                content = <div></div>
                 break
             default:
                 content = null

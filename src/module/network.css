@@ -26,11 +26,10 @@
     justify-content: space-between;
 }
 
-.btn-send {
-    height: 45px;
-    padding: 8px;
-}
-
 .inputbox-menu {
     justify-content: space-around;
+}
+
+.inputbox-menu-item {
+    padding: 3px;
 }

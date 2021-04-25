@@ -1,5 +1,8 @@
 import React from 'react'
 import { FontAwesomeIcon as Icon } from "@fortawesome/react-fontawesome"
+import { faFileAudio, faFileVideo, faSmile } from '@fortawesome/free-solid-svg-icons'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 import { faDotCircle, faFile, faFileExcel, faImage } from '@fortawesome/free-solid-svg-icons'
 import { RTCClient, UserClient, GroupClient } from './client/client'
 import { RTCProto, UserProto, GroupProto } from "./client/proto/proto"
@@ -362,24 +365,87 @@ class InputBoxPanel extends React.Component {
 
     constructor(props) {
         super(props)
+        this.state = {
+            type: 'EMOJI',
+            toggle: false
+        }
+    }
+
+    handleClick = menu => {
+        const { toggle, type } = this.state
+        this.setState({
+            type: menu,
+            toggle: type === menu ? !toggle : true
+        })
+    }
+
+
+    render() {
+        console.log(this.state)
+        let panel = null;
+        const { toggle, type } = this.state
+        if (toggle) {
+            switch (type) {
+                case 'IMAGE':
+                    panel = <div>img selector</div>
+                    break
+                case 'FILE':
+                    panel = <div>file selector</div>
+                    break
+                case 'EMOJI':
+                    panel = <div><Picker className='float-left' title='Pick your emoji…' emoji='point_up' onSelect={this.handleSelect} /></div>
+                    break
+                case 'AUDIO':
+                    panel = <div>audio selector</div>
+                    break
+                case 'VIDEO':
+                    panel = <div>video selector</div>
+                    break
+                default:
+                    null
+            }
+        }
+        return (
+            <div className='inputbox panel flex-1'>
+                <textarea className='inputbox-textarea w-100' placeholder='Please input here' />
+                <div className='inputbox-footer flex'>
+                    <div className='inputbox-menu flex flex-row'>
+                        <InputBoxMenu panel='IMAGE' icon={faImage} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='FILE' icon={faFile} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='AUDIO' icon={faFileAudio} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='VIDEO' icon={faFileVideo} clickHanlder={this.handleClick} />
+                        <InputBoxMenu panel='EMOJI' icon={faSmile} clickHanlder={this.handleClick} />
+                    </div>
+                    <div className='inputbox-btn p-3'>
+                        <button className='btn-send p-3'>Send</button>
+                    </div>
+                </div>
+                <div className='input-menu-panel'>{panel}</div>
+            </div>
+        )
+    }
+
+}
+
+class InputBoxMenu extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    handleClick = () => {
+        const { clickHanlder } = this.props
+        const { panel } = this.props
+        clickHanlder(panel)
     }
 
     render() {
-        return <div className='inputbox panel flex-1'>
-            <div className='inputbox-content'>
-                <textarea className='inputbox-textarea w-100' placeholder='Please input here' />
-                <div className='inputbox-footer flex'>
-                    <div className='inputbox-menu flex'>
-                        <Icon icon={faImage} />
-                        <Icon icon={faFile} />
-                        <EmojiPanel />
-                    </div>
-                    <button className='btn-send'>Send</button>
-                </div>
-            </div>
+        const { icon } = this.props
+        return <div className='inputbox-menu-item' onClick={this.handleClick}>
+            <Icon icon={icon} />
         </div>
     }
-
 }
 
 // 聊天-历史-记录

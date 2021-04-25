@@ -30,7 +30,7 @@ export default class EmojiPanel extends React.Component {
 
     render() {
         const { on } = this.state
-        return <div>
+        return <div style={{ padding: '3px' }}>
             {on ? <Picker className='float-left' title='Pick your emoji…' emoji='point_up' onSelect={this.handleSelect} /> : <Icon icon={faSmile} onClick={this.handleClick} />}
         </div>
     }

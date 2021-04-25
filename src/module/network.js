@@ -394,19 +394,19 @@ class InputBoxPanel extends React.Component {
                     panel = <div>img selector</div>
                     break
                 case 'VOICE':
-                    panel = <div>audio selector</div>
+                    panel = <AudioPicker />
                     break
                 case 'CAMERA':
-                    panel = <div>audio selector</div>
+                    panel = <CameraPicker />
                     break
                 case 'MICROPHONE':
-                    panel = <div>audio selector</div>
+                    panel = <MicrophonePicker />
                     break
                 case 'VIDEO':
-                    panel = <div>video selector</div>
+                    panel = <VideoPicker />
                     break
                 case 'EMOJI':
-                    panel = <div><Picker className='float-left' title='Pick your emoji…' emoji='point_up' onSelect={this.handleSelect} /></div>
+                    panel = <EmojiPicker />
                     break
                 default:
                     null
@@ -451,13 +451,16 @@ class InputBoxMenu extends React.Component {
 
     render() {
         const { icon } = this.props
-        return <div className='inputbox-menu-item' onClick={this.handleClick}>
-            <Icon icon={icon} />
-        </div>
+        return (
+            <div className='inputbox-menu-item' onClick={this.handleClick}>
+                <Icon icon={icon} />
+            </div>
+        )
     }
 }
 
 class FilePicker extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {
@@ -476,16 +479,50 @@ class FilePicker extends React.Component {
 
     render() {
         const { multiple } = this.props
-        return <div>
-            <form encType='multipart/form-data'>
-                <label htmlFor="file">Choose file to upload</label>
-                <input type='file' id='file' name='file' accept='image/png, image/jpeg, *.pdf, *.mp3, *.mp4' multiple capture='environment' onChange={this.handleChange} onInput={this.handleInput} />
-            </form>
-        </div>
+        return (
+            <div className='file-picker p-5'>
+                <form className='file-form' encType='multipart/form-data'>
+                    <input type='file' id='file' name='file' accept='*/*' multiple onChange={this.handleChange} onInput={this.handleInput} />
+                </form>
+            </div>
+        )
     }
 }
 
-class AudioPicker extends React.Component {
+class EmojiPicker extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        return (
+            <div className='emoji'>
+                <Picker title='Pick your emoji…' emoji='point_up' onSelect={this.handleSelect} />
+            </div>
+        )
+    }
+}
+
+class CameraPicker extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    render() {
+        return (
+            <div className='camera'>
+                <input type='file' accept='image/*' capture='user' />
+            </div>
+        )
+    }
+}
+
+class MicrophonePicker extends React.Component {
+
     constructor(props) {
         super(props)
         this.state = {}
@@ -502,12 +539,43 @@ class AudioPicker extends React.Component {
     }
 
     render() {
-        return <div>
-            <form encType='multipart/form-data'>
-                <label htmlFor="file">Choose file to upload</label>
-                <input type='file' id='audio' name='audio' accept='audio/mp3, audio/wav' capture='environment' onChange={this.handleChange} onInput={this.handleInput} />
-            </form>
-        </div>
+        return (
+            <div>
+                <form encType='multipart/form-data'>
+                    <label htmlFor="file">Choose file to upload</label>
+                    <input type='file' id='audio' name='audio' accept='audio/*' capture onChange={this.handleChange} onInput={this.handleInput} />
+                </form>
+            </div>
+        )
+    }
+}
+
+class AudioPicker extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {}
+    }
+
+    handleChange = e => {
+        console.log(e.target.files)
+        // TODO send file/files
+    }
+
+    handleInput = e => {
+        let v = e.target.value
+        console.log('current value is:' + v)
+    }
+
+    render() {
+        return (
+            <div>
+                <form encType='multipart/form-data'>
+                    <label htmlFor="file">Choose file to upload</label>
+                    <input type='file' id='audio' name='audio' accept='audio/*' capture onChange={this.handleChange} onInput={this.handleInput} />
+                </form>
+            </div>
+        )
     }
 }
 
@@ -521,7 +589,7 @@ class VideoPicker extends React.Component {
         return <div>
             <form encType='multipart/form-data'>
                 <label htmlFor="file">Choose file to upload</label>
-                <input type='file' id='video' name='video' accept='video/mp4' capture='environment' />
+                <input type='file' id='video' name='video' accept='video/*' capture='environment' />
             </form>
         </div>
     }

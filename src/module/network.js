@@ -335,7 +335,7 @@ class HistoryPanel extends React.Component {
             {
                 recordId: 1,
                 type: 'text',
-                text: 'Good morning my neigbor.',
+                text: 'Good morning my neighbor.',
                 recordTime: '2021-02-03 12:01'
             },
             {
@@ -609,22 +609,22 @@ class ChatRecord extends React.Component {
 
         let content = null;
         switch (record.type) {
-            case 'text':
+            case 'TEXT':
                 content = <div>{record.text}</div>
                 break
-            case 'audio':
+            case 'AUDIO':
                 content = <Audio src={record.url} />
                 break
-            case 'image':
+            case 'IMAGE':
                 content = <Image src={record.url} />
                 break
-            case 'file':
+            case 'FILE':
                 content = <File name={record.url} />
                 break
-            case 'video':
+            case 'VIDEO':
                 content = <Image src={record.url} />
                 break
-            case 'emoji':
+            case 'EMOJI':
                 content = <div></div>
                 break
             default:

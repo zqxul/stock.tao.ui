@@ -12,6 +12,7 @@ export function loadGroupProto() {
         load(proto).then(root => {
             GroupProto.PbStockTao = root.lookupType('PbStockTao')
             GroupProto.PbGroupInfo = root.lookupType('PbGroupInfo')
+            GroupProto.PbGroupRequest = root.lookupType('PbGroupRequest')
             GroupProto.PbGroupMemberRequest = root.lookupType('PbGroupMemberRequest')
             GroupProto.PbGroupMemberResponse = root.lookupType('PbGroupMemberResponse')
             GroupProto.PbUserInfo = root.lookupType('PbUserInfo')
@@ -45,9 +46,9 @@ class Client {
             new gprc.MethodDescriptor(
                 '/Group/List',
                 'UNARY',
-                GroupProto.PbLoginRequest,
+                GroupProto.PbGroupRequest,
                 GroupProto.PbStockTao,
-                message => GroupProto.PbLoginRequest.encode(message).finish(),
+                message => GroupProto.PbGroupRequest.encode(message).finish(),
                 buffer => {
                     let response = GroupProto.PbStockTao.decode(buffer)
                     if (response.data) {

@@ -4,5 +4,5 @@ export const UserProto = loadUserProto()
 import { loadRTCProto } from '../rtc'
 export const RTCProto = loadRTCProto()
 
-import { loadGroupProto } from '../group'
+import { loadGroupProto } from '../tag'
 export const GroupProto = loadGroupProto()

@@ -2,7 +2,7 @@ syntax="proto3";
 
 import "google/protobuf/any.proto";
 
-option go_package=".;group";
+option go_package=".;tag";
 
 message PbStockTao {
     int32 code = 1;
@@ -10,21 +10,21 @@ message PbStockTao {
     google.protobuf.Any data = 3;
 }
 
-message PbGroupInfo{
-    int64 groupID =1;
-    string groupName = 2;
+message PbTagInfo{
+    int64 tagID =1;
+    string tagName = 2;
 }
 
-message PbGroupMemberRequest{
-    int64 groupID=1;
+message PbTagMemberRequest{
+    int64 tagID=1;
 }
 
-message PbGroupMemberResponse{
+message PbTagMemberResponse{
     int64 groupID=1;
     repeated PbUserInfo userInfos=2;
 }
 
-message PbGroupRequest{}
+message PbTagListRequest{}
 
 message PbUserInfo{
     int64 userID = 1;
@@ -32,13 +32,14 @@ message PbUserInfo{
     string nickname = 3;
     string avatar = 4;
     bool online = 5;
+    repeated string tags = 6;
 }
 
 
-service PbGroup {
+service PbTag {
 
-    rpc List(PbGroupRequest) returns (PbStockTao);
+    rpc List(PbTagListRequest) returns (PbStockTao);
 
-    rpc ListMembers (PbGroupMemberRequest) returns (PbStockTao);
+    rpc ListMembers (PbTagMemberRequest) returns (PbStockTao);
 
 }

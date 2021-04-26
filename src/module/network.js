@@ -6,7 +6,7 @@ import { Picker } from 'emoji-mart'
 import Dropzone from 'react-dropzone'
 import { faDotCircle, faFile, faFileExcel, faImage } from '@fortawesome/free-solid-svg-icons'
 import { RTCClient, UserClient, GroupClient } from './client/client'
-import { RTCProto, UserProto, GroupProto } from "./client/proto/proto"
+import { RTCProto, UserProto, GroupProto } from "./proto/proto"
 import './network.css'
 import EmojiPanel from './emoji'
 export default class NetWorkTab extends React.Component {

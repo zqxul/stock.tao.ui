@@ -1,33 +1,7 @@
-import { load, Method } from 'protobufjs'
 import * as gprc from 'grpc-web'
-import proto from './proto/user.proto'
-
-const UserProto = {
-    load: false
-}
-
-export function loadUserProto() {
-    if (!UserProto.load) {
-        console.log('start loading user.proto')
-        load(proto).then(root => {
-            UserProto.PbStockTao = root.lookupType('PbStockTao')
-            UserProto.PbLoginRequest = root.lookupType('PbLoginRequest')
-            UserProto.PbLoginResponse = root.lookupType('PbLoginResponse')
-            UserProto.PbRegisterRequest = root.lookupType('PbRegisterRequest')
-            UserProto.PbRegisterResponse = root.lookupType('PbRegisterResponse')
-            UserProto.load = true
-            console.log('load user.proto success')
-        }).catch(err => {
-            console.log('load user.proto error:', err)
-        })
-    }
-    return UserProto
-}
+import { UserProto } from '../proto/proto'
 
 class Client {
-
-    // load user.proto
-    UserProto = loadUserProto()
 
     constructor(hostname, credentials, options) {
         if (!options) options = {};
